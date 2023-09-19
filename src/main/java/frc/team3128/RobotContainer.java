@@ -31,6 +31,7 @@ import frc.team3128.subsystems.Led;
 import frc.team3128.common.utility.NAR_Shuffleboard;
 import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Vision;
+import frc.team3128.subsystems.Wrist;
 
 import java.util.function.BooleanSupplier;
 
@@ -42,7 +43,7 @@ import java.util.function.BooleanSupplier;
  */
 public class RobotContainer {
 
-    private Swerve swerve;
+    //private Swerve swerve;
     private Vision vision;
     private Led led;
 
@@ -64,9 +65,10 @@ public class RobotContainer {
         var x = NAR_Shuffleboard.addData("DEBUG", "TOGGLE", false, 0, 0).withWidget("Toggle Button");
         DEBUG = ()-> x.getEntry().getBoolean(false);
 
-        swerve = Swerve.getInstance();
-        vision = Vision.getInstance();
-        led = Led.getInstance();
+
+        // swerve = Swerve.getInstance();
+        // vision = Vision.getInstance();
+        // led = Led.getInstance();
 
         //TODO: Enable all PIDSubsystems so that useOutput runs here
         // pivot.enable();
@@ -82,7 +84,7 @@ public class RobotContainer {
         
         
         //uncomment line below to enable driving
-        commandScheduler.setDefaultCommand(swerve, new CmdSwerveDrive(controller::getLeftX,controller::getLeftY, controller::getRightX, true));
+        // commandScheduler.setDefaultCommand(swerve, new CmdSwerveDrive(controller::getLeftX,controller::getLeftY, controller::getRightX, true));
         initDashboard();
         configureButtonBindings();
         
@@ -91,43 +93,62 @@ public class RobotContainer {
     }   
 
     private void configureButtonBindings() {
-        controller.getButton("A").onTrue(new InstantCommand(()-> Vision.AUTO_ENABLED = !Vision.AUTO_ENABLED));
-        controller.getButton("RightTrigger").onTrue(new InstantCommand(()-> swerve.throttle = 1)).onFalse(new InstantCommand(()-> swerve.throttle = 0.8));
-        controller.getButton("LeftTrigger").onTrue(new InstantCommand(()-> swerve.throttle = .25)).onFalse(new InstantCommand(()-> swerve.throttle = 0.8));
-        controller.getButton("X").onTrue(new RunCommand(()-> swerve.xlock(), swerve)).onFalse(new InstantCommand(()-> swerve.stop(),swerve));
-        controller.getButton("B").onTrue(new InstantCommand(()-> swerve.resetEncoders()));
+        // controller.getButton("A").onTrue(new InstantCommand(()-> Vision.AUTO_ENABLED = !Vision.AUTO_ENABLED));
+        // controller.getButton("RightTrigger").onTrue(new InstantCommand(()-> swerve.throttle = 1)).onFalse(new InstantCommand(()-> swerve.throttle = 0.8));
+        // controller.getButton("LeftTrigger").onTrue(new InstantCommand(()-> swerve.throttle = .25)).onFalse(new InstantCommand(()-> swerve.throttle = 0.8));
+        // controller.getButton("X").onTrue(new RunCommand(()-> swerve.xlock(), swerve)).onFalse(new InstantCommand(()-> swerve.stop(),swerve));
+        // controller.getButton("B").onTrue(new InstantCommand(()-> swerve.resetEncoders()));
         
-        rightStick.getButton(1).onTrue(new InstantCommand(()->swerve.zeroGyro()));
+        // rightStick.getButton(1).onTrue(new InstantCommand(()->swerve.zeroGyro()));
         
-        rightStick.getButton(7).onTrue(Commands.sequence(
-                                            Commands.deadline(Commands.sequence(new WaitUntilCommand(()-> Math.abs(swerve.getPitch()) > 6), new CmdBangBangBalance()), new CmdBalance()), 
-                                            //new RunCommand(()-> swerve.drive(new Translation2d(CmdBalance.DIRECTION ? -0.25 : 0.25,0),0,true)).withTimeout(0.5), 
-                                            new RunCommand(()->Swerve.getInstance().xlock(), Swerve.getInstance())));
+        // rightStick.getButton(7).onTrue(Commands.sequence(
+        //                                     Commands.deadline(Commands.sequence(new WaitUntilCommand(()-> Math.abs(swerve.getPitch()) > 6), new CmdBangBangBalance()), new CmdBalance()), 
+        //                                     //new RunCommand(()-> swerve.drive(new Translation2d(CmdBalance.DIRECTION ? -0.25 : 0.25,0),0,true)).withTimeout(0.5), 
+        //                                     new RunCommand(()->Swerve.getInstance().xlock(), Swerve.getInstance())));
 
-        buttonPad.getButton(1).onTrue(new InstantCommand(()-> {
-            Vision.SELECTED_GRID = DriverStation.getAlliance() == Alliance.Red ? 0 : 2;
-        }));
-        buttonPad.getButton(2).onTrue(new InstantCommand(()-> Vision.SELECTED_GRID = 1));
-        buttonPad.getButton(3).onTrue(new InstantCommand(()-> {
-            Vision.SELECTED_GRID = DriverStation.getAlliance() == Alliance.Red ? 2 : 0;
-        }));
+        // buttonPad.getButton(1).onTrue(new InstantCommand(()-> {
+        //     Vision.SELECTED_GRID = DriverStation.getAlliance() == Alliance.Red ? 0 : 2;
+        // }));
+        // buttonPad.getButton(2).onTrue(new InstantCommand(()-> Vision.SELECTED_GRID = 1));
+        // buttonPad.getButton(3).onTrue(new InstantCommand(()-> {
+        //     Vision.SELECTED_GRID = DriverStation.getAlliance() == Alliance.Red ? 2 : 0;
+        // }));
 
-        operatorController.getButton("Back").onTrue(new InstantCommand(()-> Vision.MANUAL = !Vision.MANUAL));
+        // operatorController.getButton("Back").onTrue(new InstantCommand(()-> Vision.MANUAL = !Vision.MANUAL));
 
-        inProtected = new Trigger(
-            () -> {
-                Pose2d pose = Swerve.getInstance().getPose();
-                if (DriverStation.getAlliance() == Alliance.Red) {
-                    return ((pose.getY() < midY + robotLength/2 && pose.getX() < outerX + robotLength/2) || 
-                        (pose.getY() < leftY + robotLength/2 && pose.getX() < midX + robotLength/2)) ||
-                        ((pose.getY() > 6.85 && pose.getX() > FIELD_X_LENGTH - 6.70) || (pose.getY() > 5.50 && pose.getX() > FIELD_X_LENGTH - 3.30));
-                }
-                return ((pose.getY() < midY + robotLength/2 && pose.getX() > FIELD_X_LENGTH - outerX - robotLength/2) || 
-                    (pose.getY() < leftY + robotLength/2 && pose.getX() > FIELD_X_LENGTH - midX - robotLength/2)) ||
-                    ((pose.getY() > 6.85 && pose.getX() < 6.70) || (pose.getY() > 5.50 && pose.getX() < 3.30));
-            }
-        );
-        inProtected.onTrue(new InstantCommand(()-> controller.startVibrate())).onFalse(new InstantCommand(()-> controller.stopVibrate()));
+        // inProtected = new Trigger(
+        //     () -> {
+        //         Pose2d pose = Swerve.getInstance().getPose();
+        //         if (DriverStation.getAlliance() == Alliance.Red) {
+        //             return ((pose.getY() < midY + robotLength/2 && pose.getX() < outerX + robotLength/2) || 
+        //                 (pose.getY() < leftY + robotLength/2 && pose.getX() < midX + robotLength/2)) ||
+        //                 ((pose.getY() > 6.85 && pose.getX() > FIELD_X_LENGTH - 6.70) || (pose.getY() > 5.50 && pose.getX() > FIELD_X_LENGTH - 3.30));
+        //         }
+        //         return ((pose.getY() < midY + robotLength/2 && pose.getX() > FIELD_X_LENGTH - outerX - robotLength/2) || 
+        //             (pose.getY() < leftY + robotLength/2 && pose.getX() > FIELD_X_LENGTH - midX - robotLength/2)) ||
+        //             ((pose.getY() > 6.85 && pose.getX() < 6.70) || (pose.getY() > 5.50 && pose.getX() < 3.30));
+        //     }
+        // );
+        // inProtected.onTrue(new InstantCommand(()-> controller.startVibrate())).onFalse(new InstantCommand(()-> controller.stopVibrate()));
+        
+        rightStick.getButton(1).onTrue(CmdManipOuttake());
+
+        rightStick.getButton(2).onTrue(CmdStopManip());
+
+        rightStick.getButton(3).onTrue(CmdManipIntake(true));
+        rightStick.getButton(4).onTrue(CmdManipIntake(false));
+
+        // rightStick.getButton(1).onTrue(CmdWrist(20));
+
+
+
+        
+        rightStick.getButton(9).onTrue(CmdMoveWrist(0));
+        rightStick.getButton(7).onTrue(CmdMoveWrist(-0.5)).onFalse(CmdMoveWrist(0));
+        rightStick.getButton(8).onTrue(CmdMoveWrist(0.5)).onFalse(CmdMoveWrist(0));
+
+
+
     }
 
     public void init() {
@@ -140,8 +161,8 @@ public class RobotContainer {
             //SmartDashboard.putData("Swerve", swerve);
         }
 
-        swerve.initShuffleboard();
-        vision.initShuffleboard();
+        // swerve.initShuffleboard();
+        // vision.initShuffleboard();
 
         NarwhalDashboard.startServer();
         
@@ -153,15 +174,15 @@ public class RobotContainer {
     }
 
     public void updateDashboard() {
-        NarwhalDashboard.put("time", Timer.getMatchTime());
-        NarwhalDashboard.put("voltage", RobotController.getBatteryVoltage());
-        NarwhalDashboard.put("x", swerve.getPose().getX());
-        NarwhalDashboard.put("y", swerve.getPose().getY());
-        SmartDashboard.putNumber("LeftX",controller.getLeftX());
-        SmartDashboard.putNumber("LeftY",controller.getLeftY());
-        SmartDashboard.putNumber("RightX",controller.getRightX());
-        SmartDashboard.putNumber("RightY",controller.getRightY());
+        // NarwhalDashboard.put("time", Timer.getMatchTime());
+        // NarwhalDashboard.put("voltage", RobotController.getBatteryVoltage());
+        // NarwhalDashboard.put("x", swerve.getPose().getX());
+        // NarwhalDashboard.put("y", swerve.getPose().getY());
+        // SmartDashboard.putNumber("LeftX",controller.getLeftX());
+        // SmartDashboard.putNumber("LeftY",controller.getLeftY());
+        // SmartDashboard.putNumber("RightX",controller.getRightX());
+        // SmartDashboard.putNumber("RightY",controller.getRightY());
         NAR_Shuffleboard.update();
-        SmartDashboard.putNumber("Pitch",swerve.getPitch());
+        // SmartDashboard.putNumber("Pitch",swerve.getPitch());
     }
 }

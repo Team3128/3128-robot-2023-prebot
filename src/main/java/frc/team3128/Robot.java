@@ -22,7 +22,7 @@ public class Robot extends TimedRobot {
 
     public static RobotContainer m_robotContainer = new RobotContainer();
     private Command m_autonomousCommand;
-    public static AutoPrograms autoPrograms = new AutoPrograms();
+    //public static AutoPrograms autoPrograms = new AutoPrograms();
     public Timer timer;
     public Timer xlockTimer;
     public double startTime;
@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         m_robotContainer.init();
         timer = new Timer();
-        m_autonomousCommand = autoPrograms.getAutonomousCommand();
+        //m_autonomousCommand = autoPrograms.getAutonomousCommand();
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
             timer.start();

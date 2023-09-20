@@ -35,7 +35,7 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
     public NAR_PIDSubsystem(PIDController controller, double kS, double kV, double kG) {
         m_controller = controller;
         this.kG_Function = () -> 1;
-        initShuffleboard(kS, kV, kG);
+        // initShuffleboard(kS, kV, kG);
         min = Double.NEGATIVE_INFINITY;
         max = Double.POSITIVE_INFINITY;
     }
@@ -60,7 +60,7 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
         }
     }
 
-    private void initShuffleboard(double kS, double kV, double kG) {
+    public void initShuffleboard(double kS, double kV, double kG) {
         NAR_Shuffleboard.addComplex(getName(), "PID_Controller", m_controller, 0, 0);
 
         NAR_Shuffleboard.addData(getName(), "Enabled", ()-> isEnabled(), 1, 0);

@@ -49,7 +49,7 @@ public class CmdManager {
             runOnce(()-> manipulator.intake(cone), manipulator),
             waitSeconds(0.4),
             waitUntil(()-> manipulator.hasObjectPresent()),
-            waitSeconds(cone ? 0.15 : 0),
+            waitSeconds(cone ? 0.75 : 0),
             runOnce(()-> manipulator.stallPower())
         );
     }

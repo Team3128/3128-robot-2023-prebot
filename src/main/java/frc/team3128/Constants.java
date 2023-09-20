@@ -510,17 +510,17 @@ public class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
 
-        public static final double kS = 0;
+        public static final double kS = 0.12;
         public static final double kV = 0;
-        public static final double kG = 10;
+        public static final double kG = 0.22;
 
-        public static final double GEAR_RATIO = 3.0;
+        public static final double GEAR_RATIO = 3.0; //3.0 * 30;
 
         public static final double ROTATION_TO_DEGREES = 360;
 
         public static final double ENCODER_CONVERSION_FACTOR_TO_DEGREES = 360;
         
-        public static final double ANGLE_OFFSET = 44.0; 
+        public static final double ANGLE_OFFSET = 46.6; // TODO fix offset issue
         public static final int ENCODER_DIO_ID = 8;
 
         public static final int MIN_ANGLE = -55;
@@ -539,7 +539,7 @@ public class Constants {
     public static class ManipulatorConstants{
         public static final int ROLLER_MOTOR_ID = 4;
         public static final double ROLLER_POWER = 0.9;
-        public static final double STALL_POWER_CONE = 0.0;
+        public static final double STALL_POWER_CONE = 0.15;
         public static final double STALL_POWER_CUBE = 0.0;
 
 

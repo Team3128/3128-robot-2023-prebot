@@ -38,7 +38,7 @@ public class Wrist extends NAR_PIDSubsystem {
         }
     }
 
-    public static Wrist getInstance() {
+    public static synchronized Wrist getInstance() {
         if (instance == null){
             instance = new Wrist();  
         }
@@ -54,7 +54,7 @@ public class Wrist extends NAR_PIDSubsystem {
     }
 
     private void configMotor() {
-        m_wrist = new NAR_CANSparkMax(WRIST_ID, EncoderType.Relative, MotorType.kBrushless);
+        m_wrist = new NAR_CANSparkMax(WRIST_ID, EncoderType.Absolute, MotorType.kBrushless);
         m_wrist.setInverted(false);
         m_wrist.setIdleMode(IdleMode.kBrake);
         m_wrist.setSmartCurrentLimit(40);
@@ -68,8 +68,14 @@ public class Wrist extends NAR_PIDSubsystem {
 
     @Override
     public double getMeasurement() {
+        // for relative
+        // return MathUtil.inputModulus(m_wrist.getSelectedSensorPosition() * ROTATION_TO_DEGREES / GEAR_RATIO + ANGLE_OFFSET, -180, 180);
+        
+        // for absolute
         return MathUtil.inputModulus(-m_wrist.getSelectedSensorPosition() * ROTATION_TO_DEGREES / GEAR_RATIO + ANGLE_OFFSET, -180, 180);
-        // return MathUtil.inputModulus(-m_encoder.get() * ENCODER_CONVERSION_FACTOR_TO_DEGREES - ANGLE_OFFSET,-180, 180);
+        // return MathUtil.inputModulus(-m_wrist.getSelectedSensorPosition() * 120, -180, 180);
+
+
     }
 
     public void resetEncoder() {
@@ -77,6 +83,7 @@ public class Wrist extends NAR_PIDSubsystem {
     }
 
     public void set(double power) {
+        disable();
         m_wrist.set(power);
     }
 

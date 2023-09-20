@@ -131,23 +131,17 @@ public class RobotContainer {
         // );
         // inProtected.onTrue(new InstantCommand(()-> controller.startVibrate())).onFalse(new InstantCommand(()-> controller.stopVibrate()));
         
+        //Testing
+
         rightStick.getButton(1).onTrue(CmdManipOuttake());
-
         rightStick.getButton(2).onTrue(CmdStopManip());
-
         rightStick.getButton(3).onTrue(CmdManipIntake(true));
         rightStick.getButton(4).onTrue(CmdManipIntake(false));
 
-        // rightStick.getButton(1).onTrue(CmdWrist(20));
-
-
-
-        
-        rightStick.getButton(9).onTrue(CmdMoveWrist(0));
-        rightStick.getButton(7).onTrue(CmdMoveWrist(-0.5)).onFalse(CmdMoveWrist(0));
-        rightStick.getButton(8).onTrue(CmdMoveWrist(0.5)).onFalse(CmdMoveWrist(0));
-
-
+        rightStick.getButton(5).onTrue(CmdMoveWrist(-0.5)).onFalse(CmdMoveWrist(0));
+        rightStick.getButton(6).onTrue(CmdMoveWrist(0.5)).onFalse(CmdMoveWrist(0));
+        rightStick.getButton(7).onTrue(new InstantCommand(()-> Wrist.getInstance().resetEncoder()));
+        rightStick.getButton(8).onTrue(CmdWrist(0));
 
     }
 

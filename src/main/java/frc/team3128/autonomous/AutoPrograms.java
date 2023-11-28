@@ -24,15 +24,15 @@ public class AutoPrograms {
 
     private void initAutoSelector() {
         final String[] autoStrings = new String[] {
-                                            //Blue Autos
-                                                //Cable
-                                                "cable_1Cone+1Cube","cable_1Cone+1.5Cube", "cable_1Cone+2Cube", "cable_1Cone+1.5Cube+Climb",
-                                                //Mid
-                                                "mid_1Cone+Climb","mid_1Cone+0.5Cube+Climb", "mid_1Cone+1Cube+Climb",
-                                                //Hp
-                                                "hp_1Cone+1Cube",
+                                        //Blue Autos
+                                            //Cable
+                                            "cable_1Cone+1Cube", "cable_1Cone+1.5Cube","cable_1Cone+2Cube", "cable_1Cone+1.5Cube+Climb", "cable_pickup_Cube1", "cable_score_Cube1","cable_pickup_Cube2","cable_return_Cube2",
+                                            //Mid
+                                            "mid_1Cone+Climb","mid_1Cone+0.5Cube+Climb", "mid_1Cone+1Cube+Climb","mid_pickup_Cube2","mid_score_Cube2","mid_balance",
+                                            //Hp
+                                            "hp_1Cone+1Cube","hp_pickup_Cube4","hp_score_Cube4","hp_pickup_Cube3","hp_return_Cube3",
 
-                                                "scuffedClimb"
+                                            "scuffedClimb"
                                             };
         NarwhalDashboard.addAutos(autoStrings);
     }

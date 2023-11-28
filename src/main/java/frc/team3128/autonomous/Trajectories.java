@@ -1,5 +1,6 @@
 package frc.team3128.autonomous;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -100,8 +101,24 @@ public class Trajectories {
         return builder.fullAuto(trajectory);
     }
 
-    public static CommandBase get(String name) {
-        return builder.fullAuto(trajectories.get(name));
+    public static ArrayList<String> stringToList(String name) {
+        String prefix = name.split("_")[0];
+        String[] autoStrings = name.split("_")[1].split("&");
+        ArrayList<String> ret = new ArrayList<String>();
+        for (String curAuto : autoStrings) {
+            ret.add(prefix + "_" + curAuto);
+        }
+        return ret;
+    }
+
+    public static CommandBase get(ArrayList<String> names) {
+        ArrayList<PathPlannerTrajectory> curTrajectories = new ArrayList<PathPlannerTrajectory>();
+        for (String name : names) {
+            for (PathPlannerTrajectory curTrajectory : trajectories.get(name)) {
+                curTrajectories.add(curTrajectory);
+            }
+        }
+        return builder.fullAuto(curTrajectories);
     }
 
     public static CommandBase resetAuto() {

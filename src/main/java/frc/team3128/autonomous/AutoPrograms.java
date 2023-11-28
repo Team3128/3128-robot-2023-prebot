@@ -3,10 +3,14 @@ package frc.team3128.autonomous;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 import frc.team3128.PositionConstants.Position;
 import frc.team3128.commands.CmdAutoBalance;
 import frc.team3128.common.narwhaldashboard.NarwhalDashboard;
+
+import static frc.team3128.Constants.AutoConstants.MODULARIZED_AUTOS;
 import static frc.team3128.commands.CmdManager.*;
 
 /**
@@ -54,7 +58,7 @@ public class AutoPrograms {
 
         else {
             selectedAutoName = ((DriverStation.getAlliance() == Alliance.Red) ? "r_" : "b_") + selectedAutoName;
-            autoCommand = Trajectories.get(selectedAutoName);
+            autoCommand = Trajectories.get(MODULARIZED_AUTOS.get("b-cable_1Cone+1Cube"));
         }
 
         return autoCommand.beforeStarting(Trajectories.resetAuto());

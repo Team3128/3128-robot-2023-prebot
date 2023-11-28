@@ -1,5 +1,6 @@
 package frc.team3128;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.team3128.autonomous.Trajectories;
 import frc.team3128.common.hardware.camera.Camera;
 
 import frc.team3128.common.swerveNeo.SwerveModuleConstants;
@@ -76,7 +78,13 @@ public class Constants {
         public static final double RAMP_THRESHOLD = 9; //8, 10
         public static final double DRIVE_SPEED = Units.inchesToMeters(30); //30, 40
 
-        // public static final HashMap<String, List<String>> MODULARIZED_AUTOS = 
+        public static final HashMap<String, ArrayList<String>> MODULARIZED_AUTOS = new HashMap<String, ArrayList<String>>();
+
+        // TODO: finish all autos
+        static {
+            MODULARIZED_AUTOS.put("b-cable_1Cone+1Cube", Trajectories.stringToList("b-cable_pickup-Cube1&score-Cube1"));
+            // MODULARIZED_AUTOS.put()
+        }
 
     }
 

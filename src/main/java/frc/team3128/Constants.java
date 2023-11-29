@@ -438,8 +438,19 @@ public class Constants {
             }
     
         }
+
     }
 
+    public static class LimelightConstants {
+            public static final double CAMERA_ANGLE = 2;
+            public static final double CAMERA_HEIGHT = 2;
+            public static final double FRONT_DISTANCE = 2;
+            public static final double TX_THRESHOLD = 4;
+            
+
+
+
+        }
 
 }
 

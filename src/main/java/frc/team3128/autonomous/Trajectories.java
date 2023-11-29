@@ -43,22 +43,24 @@ public class Trajectories {
     private static SwerveAutoBuilder builder;
 
     public static void initTrajectories() {
+        // modularized autos
         final String[] trajectoryNames = {
                                         //Blue Autos
                                             //Cable
-                                            "b_cable_1Cone+1Cube", "b_cable_1Cone+1.5Cube","b_cable_1Cone+2Cube", "b_cable_1Cone+1.5Cube+Climb", "b_cable_pickup_Cube1", "b_cable_score_Cube1","b_cable_pickup_Cube2","b_cable_return_Cube2",
+                                            "b-cable_pickup-Cube1", "b-cable_score-Cube1","b-cable_pickup-Cube2","b-cable_return-Cube2",
                                             //Mid
-                                            "b_mid_1Cone+Climb","b_mid_1Cone+0.5Cube+Climb", "b_mid_1Cone+1Cube+Climb","b_mid_pickup_Cube2","b_mid_score_Cube2","b_mid_balance",
+                                            "b-mid_pickup-Cube2","b-mid_score-Cube2","b-mid_balance",
                                             //Hp
-                                            "b_hp_1Cone+1Cube","b_hp_pickup_Cube4","b_hp_score_Cube4","b_hp_pickup_Cube3","b_hp_return_Cube3",
+                                            "b-hp_pickup-Cube4","b-hp_score-Cube4","b-hp_pickup-Cube3","b-hp_return-Cube3",
                                             
                                         //Red Autos
+                                        // add autos if needed
                                             //Cable
-                                            "r_cable_1Cone+1Cube", "r_cable_1Cone+1.5Cube","r_cable_1Cone+2Cube", "r_cable_1Cone+1.5Cube+Climb",
+                                            "r-cable_pickup-Cube1",
                                             //Mid
-                                            "r_mid_1Cone+Climb","r_mid_1Cone+0.5Cube+Climb","r_mid_1Cone+1Cube+Climb",
+                                            "r-mid_pickup-Cube2",
                                             //Hp
-                                            "r_hp_1Cone+1Cube", 
+                                            "r-hp_pickup-Cube4", 
                                         };
 
         CommandEventMap.put("ScoreConeHigh", sequence(score(Position.HIGH_CONE, true)));
@@ -101,6 +103,8 @@ public class Trajectories {
         return builder.fullAuto(trajectory);
     }
 
+    // Separates auto strings into a list of strings containing the prefix (e.g. b-hp) along with as many suffixes (e.g. pickup-Cube1)
+    // Ex: "b-cable_pickup-Cube1&score-Cube1" -> {"b-cable_pickup-Cube1", "b-cable_score-Cube1"}
     public static ArrayList<String> stringToList(String name) {
         String prefix = name.split("_")[0];
         String[] autoStrings = name.split("_")[1].split("&");
@@ -111,6 +115,7 @@ public class Trajectories {
         return ret;
     }
 
+    // conjoins list of strings into one complete trajectory
     public static CommandBase get(ArrayList<String> names) {
         ArrayList<PathPlannerTrajectory> curTrajectories = new ArrayList<PathPlannerTrajectory>();
         for (String name : names) {

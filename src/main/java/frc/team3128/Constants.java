@@ -78,12 +78,13 @@ public class Constants {
         public static final double RAMP_THRESHOLD = 9; //8, 10
         public static final double DRIVE_SPEED = Units.inchesToMeters(30); //30, 40
 
+        // HashMap to convert auto name into a list of modularized autos
         public static final HashMap<String, ArrayList<String>> MODULARIZED_AUTOS = new HashMap<String, ArrayList<String>>();
 
-        // TODO: finish all autos
+        // Put other autos when needed
         static {
             MODULARIZED_AUTOS.put("b-cable_1Cone+1Cube", Trajectories.stringToList("b-cable_pickup-Cube1&score-Cube1"));
-            // MODULARIZED_AUTOS.put()
+            MODULARIZED_AUTOS.put("b_hp_1Cone+1.5Cube", Trajectories.stringToList("b-hp_pickup-Cube4&score-Cube4&pickup-Cube3&return-Cube3"));
         }
 
     }

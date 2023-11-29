@@ -2,11 +2,18 @@ package frc.team3128.subsystems;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import frc.team3128.PositionConstants.Position;
+
 import static frc.team3128.PositionConstants.Position;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
-import frc.team3128.common.hardware.motorcontroller.NAR_CANSparkMax;
+import common.core.controllers.Controller;
+import common.core.controllers.Controller.Type;
+import common.core.subsystems.NAR_PIDSubsystem;
+import common.hardware.motorcontroller.NAR_CANSparkMax;
+import common.hardware.motorcontroller.NAR_Motor.Neutral;
+
 import static frc.team3128.Constants.ElevatorConstants.*;
 
 public class Elevator extends NAR_PIDSubsystem {
@@ -23,10 +30,10 @@ public class Elevator extends NAR_PIDSubsystem {
     }
 
     public Elevator() {
-        super(new PIDController(kP, kI, kD), kS, kV, kG);
+        super(new Controller(kP, kI, kD, kS, kV, kG, Type.POSITION, 0.02));
         setConstraints(MIN_DIST, MAX_DIST);
         configMotors();
-        initShuffleboard(kS, kV, kG);
+        initShuffleboard();
         m_controller.setTolerance(ELV_TOLERANCE);
         resetEncoder();
     }
@@ -42,15 +49,15 @@ public class Elevator extends NAR_PIDSubsystem {
         m_elv1.setInverted(false);
         m_elv2.setInverted(true);
 
-        m_elv1.setIdleMode(IdleMode.kCoast);
-        m_elv2.setIdleMode(IdleMode.kCoast);
+        m_elv1.setNeutralMode(Neutral.COAST);
+        m_elv2.setNeutralMode(Neutral.COAST);
 
-        m_elv1.setSmartCurrentLimit(CURRENT_LIMIT); 
-        m_elv2.setSmartCurrentLimit(CURRENT_LIMIT);
+        m_elv1.setCurrentLimit(CURRENT_LIMIT); 
+        m_elv2.setCurrentLimit(CURRENT_LIMIT);
     }
 
     @Override
-    protected void useOutput(double output, double setpoint) {
+    protected void useOutput(double output) {
         final double power = MathUtil.clamp(output / 12.0, -1, 1);
         m_elv1.set(power);
         m_elv2.set(power);
@@ -67,12 +74,12 @@ public class Elevator extends NAR_PIDSubsystem {
     }
 
     public void resetEncoder() {
-        m_elv2.setSelectedSensorPosition(0);
+        m_elv2.resetPosition(0);
     }
 
     @Override
     public double getMeasurement() {
-        return m_elv2.getSelectedSensorPosition() / GEAR_RATIO * SPOOL_CIRCUMFERENCE;
+        return m_elv2.getPosition() / GEAR_RATIO * SPOOL_CIRCUMFERENCE;
     }
 
 }

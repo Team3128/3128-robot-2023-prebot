@@ -1,8 +1,9 @@
 package frc.team3128.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team3128.common.hardware.motorcontroller.NAR_TalonSRX;
-import frc.team3128.common.utility.NAR_Shuffleboard;
+import common.hardware.motorcontroller.NAR_TalonSRX;
+import common.hardware.motorcontroller.NAR_Motor.Neutral;
+import common.utility.shuffleboard.NAR_Shuffleboard;
 import static frc.team3128.Constants.ManipulatorConstants.*;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
@@ -29,7 +30,7 @@ public class Manipulator extends SubsystemBase {
     private void configMotor(){
         m_roller = new NAR_TalonSRX(ROLLER_MOTOR_ID);
         m_roller.setInverted(true);
-        m_roller.setNeutralMode(NeutralMode.Brake);
+        m_roller.setNeutralMode(Neutral.BRAKE);
     }
 
     public void intake(boolean cone) {
@@ -68,12 +69,12 @@ public class Manipulator extends SubsystemBase {
     }
 
     public double getCurrent(){
-        return m_roller.getStatorCurrent();
+        return m_roller.getStallCurrent();
     }
     
     public void initShuffleboard() {
         NAR_Shuffleboard.addData("Manipulator", "Manip current", () -> getCurrent(), 0, 1);
-        NAR_Shuffleboard.addData("Manipulator", "get", () -> m_roller.getMotorOutputPercent(), 0, 3);
+        NAR_Shuffleboard.addData("Manipulator", "get", () -> m_roller.getAppliedOutput(), 0, 3);
         NAR_Shuffleboard.addData("Manipulator", "ObjectPresent", ()-> hasObjectPresent(), 1, 1);
     }
 }

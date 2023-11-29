@@ -12,9 +12,9 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.team3128.common.hardware.camera.Camera;
+import common.hardware.camera.Camera;
 
-import frc.team3128.common.swerveNeo.SwerveModuleConstants;
+import common.core.swerve.SwerveModuleConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;

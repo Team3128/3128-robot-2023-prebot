@@ -10,8 +10,13 @@ import edu.wpi.first.math.util.Units;
 import static frc.team3128.Constants.WristConstants.*;
 
 import static frc.team3128.PositionConstants.Position;
-import frc.team3128.common.hardware.motorcontroller.NAR_CANSparkMax;
-import frc.team3128.common.hardware.motorcontroller.NAR_CANSparkMax.EncoderType;
+
+import common.core.controllers.Controller;
+import common.core.controllers.Controller.Type;
+import common.core.subsystems.NAR_PIDSubsystem;
+import common.hardware.motorcontroller.NAR_CANSparkMax;
+import common.hardware.motorcontroller.NAR_CANSparkMax.EncoderType;
+import common.hardware.motorcontroller.NAR_Motor.Neutral;
 
 public class Wrist extends NAR_PIDSubsystem {
     public NAR_CANSparkMax m_wrist;
@@ -26,11 +31,11 @@ public class Wrist extends NAR_PIDSubsystem {
     }
 
     public Wrist() {
-        super(new PIDController(kP, kI, kD), kS, kV, kG);
+        super(new Controller(kP, kI, kD, kS, kV, kG, Type.POSITION, 0.02));
         setkG_Function(()-> Math.cos(Units.degreesToRadians(getSetpoint())));
         setConstraints(MIN_ANGLE, MAX_ANGLE);
         configMotor();
-        initShuffleboard(kS, kV, kG);
+        initShuffleboard();
         m_controller.setTolerance(WRIST_TOLERANCE);
     }
 
@@ -39,25 +44,25 @@ public class Wrist extends NAR_PIDSubsystem {
     }
 
     private void configMotor() {
-        m_wrist = new NAR_CANSparkMax(WRIST_ID, EncoderType.Relative, MotorType.kBrushless);
+        m_wrist = new NAR_CANSparkMax(WRIST_ID, MotorType.kBrushless, EncoderType.Relative);
         m_wrist.setInverted(false);
-        m_wrist.setIdleMode(IdleMode.kCoast);
-        m_wrist.setSmartCurrentLimit(40);
+        m_wrist.setNeutralMode(Neutral.COAST);
+        m_wrist.setCurrentLimit(40);
         resetEncoder();
     }
 
     @Override
-    protected void useOutput(double output, double setpoint) {
+    protected void useOutput(double output) {
         m_wrist.set(MathUtil.clamp(output / 12.0, -1, 1));
     }
 
     @Override
     public double getMeasurement() {
-        return m_wrist.getSelectedSensorPosition() * ROTATION_TO_DEGREES / GEAR_RATIO;
+        return m_wrist.getPosition() * ROTATION_TO_DEGREES / GEAR_RATIO;
     }
 
     public void resetEncoder() {
-        m_wrist.setSelectedSensorPosition(90 * GEAR_RATIO / ROTATION_TO_DEGREES);
+        m_wrist.resetPosition(90 * GEAR_RATIO / ROTATION_TO_DEGREES);
     }
 
     public void set(double power) {

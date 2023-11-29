@@ -10,7 +10,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team3128.common.utility.NAR_Shuffleboard;
+import common.utility.shuffleboard.NAR_Shuffleboard;
 
 /**
  * A subsystem based off of {@link ProfiledPIDSubsystem} 

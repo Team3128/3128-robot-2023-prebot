@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.team3128.RobotContainer;
 import frc.team3128.Constants.LedConstants.Colors;
 import frc.team3128.PositionConstants.Position;
-import frc.team3128.common.hardware.input.NAR_XboxController;
+import common.hardware.input.NAR_XboxController;
 
 import frc.team3128.subsystems.Leds;
 import frc.team3128.subsystems.Wrist;

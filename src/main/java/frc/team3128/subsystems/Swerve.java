@@ -21,8 +21,9 @@ import frc.team3128.Constants.SwerveConstants.Mod2;
 import frc.team3128.Constants.SwerveConstants.Mod3;
 import frc.team3128.Constants.VisionConstants;
 import frc.team3128.commands.CmdManager;
-import frc.team3128.common.swerveNeo.SwerveModule;
-import frc.team3128.common.utility.NAR_Shuffleboard;
+import common.core.swerve.SwerveConstants;
+import common.core.swerve.SwerveModule;
+import common.utility.shuffleboard.NAR_Shuffleboard;
 
 import static frc.team3128.Constants.SwerveConstants.*;
 import static frc.team3128.Constants.VisionConstants.*;
@@ -55,6 +56,8 @@ public class Swerve extends SubsystemBase {
     }
 
     public Swerve() {
+        SwerveConstants.angleMotorInvert = true;
+        SwerveConstants.driveMotorInvert = true;
         gyro = new WPI_Pigeon2(pigeonID);
         gyro.configFactoryDefault();
         fieldRelative = true;
@@ -151,7 +154,7 @@ public class Swerve extends SubsystemBase {
     public SwerveModulePosition[] getPositions() {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for (SwerveModule module : modules) {
-            positions[module.moduleNumber] = module.getPosition();
+            positions[module.moduleNumber] = module.getModulePosition();
         }
         return positions;
     }

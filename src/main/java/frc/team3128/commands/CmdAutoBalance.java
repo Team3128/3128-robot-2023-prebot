@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import static frc.team3128.Constants.AutoConstants.*;
 
 import frc.team3128.Constants.SwerveConstants;
-import frc.team3128.common.utility.NAR_Shuffleboard;
+import common.utility.shuffleboard.NAR_Shuffleboard;
 import frc.team3128.subsystems.Manipulator;
 import frc.team3128.subsystems.Swerve;
 

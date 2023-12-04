@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import static frc.team3128.Constants.ShuffleboardConstants.*;
 
 /**
  * Wrapper for {@link Shuffleboard}
@@ -49,27 +50,29 @@ public class NAR_Shuffleboard {
         }
     }
 
-    private static HashMap<String, HashMap<String, entryInfo>> tabs = new HashMap<String, HashMap<String,entryInfo>>();;
+    private static HashMap<String, HashMap<String, entryInfo>> tabs = new HashMap<String, HashMap<String,entryInfo>>();
+    public static boolean[][] entryPositions = new boolean[WINDOW_HEIGHT][WINDOW_WIDTH]; // Make private later
+    
 
     /**
-   * Creates a new tab entry
-   *
-   * @param tabName the title of the new tab
-   */
+    * Creates a new tab entry
+    *
+    * @param tabName the title of the new tab
+    */
     private static void create_tab(String tabName) {
         tabs.put(tabName, new HashMap<String,entryInfo>());
     }
 
     /**
-   * Displays a value in Shuffleboard
-   *
-   * @param tabName the title of the tab to select
-   * @param name the name of the entry
-   * @param data value to display
-   * @param x -coord of the entry starting from 0
-   * @param y -coord of the entry starting from 0
-   * @return simple widget that can be modified
-   */
+    * Displays a value in Shuffleboard
+    *
+    * @param tabName the title of the tab to select
+    * @param name the name of the entry
+    * @param data value to display
+    * @param x -coord of the entry starting from 0
+    * @param y -coord of the entry starting from 0
+    * @return simple widget that can be modified
+    */
     public static SimpleWidget addData(String tabName, String name, Object data, int x, int y) {
         return addData(tabName, name, data, x, y, 1, 1);
     }
@@ -101,6 +104,13 @@ public class NAR_Shuffleboard {
      * @return simple widget that can be modified
      */
     public static SimpleWidget addData(String tabName, String name, Supplier<Object> supply, int x, int y, int width, int height){
+        if (x + width > WINDOW_WIDTH || y + height > WINDOW_HEIGHT) { throw new IllegalArgumentException("Widget Position Out of Bounds (" + x + "," + y + ")"); }
+        for (int i = x; i < x + width; i++) {
+            for (int j = y; j < y + height; j++) { // TODO is there a better way to fill?
+                if (entryPositions[i][j]) { throw new IllegalArgumentException("Widget Position Overlapping (" + i + "," + j + ")"); }
+                entryPositions[i][j] = true;
+            }
+        }
         if(!tabs.containsKey(tabName)) create_tab(tabName);
         if(tabs.get(tabName).containsKey(name)) {
             tabs.get(tabName).get(name).m_supply = supply;

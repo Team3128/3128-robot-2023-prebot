@@ -25,6 +25,11 @@ import edu.wpi.first.math.geometry.Transform2d;
 
 public class Constants {
 
+    public static class ShuffleboardConstants {
+        public static final int WINDOW_HEIGHT = 10;
+        public static final int WINDOW_WIDTH = 10;
+    }
+
     public static class TrajectoryConstants {
         public static final Rotation2d HEADING = Rotation2d.fromDegrees(180);
         

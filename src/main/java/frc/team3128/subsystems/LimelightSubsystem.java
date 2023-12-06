@@ -3,6 +3,7 @@ package frc.team3128.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3128.common.hardware.limelight.Limelight;
 import frc.team3128.common.hardware.limelight.LimelightKey;
+import frc.team3128.common.hardware.limelight.Pipeline;
 import frc.team3128.common.utility.NAR_Shuffleboard;
 import static frc.team3128.Constants.LimelightConstants.*;
 
@@ -24,6 +25,16 @@ public class LimelightSubsystem extends SubsystemBase{
         m_Limelight = new Limelight("limelight-blob", CAMERA_ANGLE, CAMERA_HEIGHT, FRONT_DISTANCE);
         isAligned = () -> Math.abs(getObjectTX()) <= TX_THRESHOLD && getObjectHasValidTarget();
         addPlateau = () -> Math.abs(getObjectTX()) <= 3 && getObjectHasValidTarget();
+    }
+    public void setElement(boolean isCone){
+        Pipeline p_cone = Pipeline.CONE;
+        Pipeline p_cube = Pipeline.CUBE;
+        if (isCone) {
+            m_Limelight.setPipeline(p_cone);
+        }
+        else{
+            m_Limelight.setPipeline(p_cube);
+        }
     }
 
     public static synchronized LimelightSubsystem getInstance() {
@@ -52,7 +63,7 @@ public class LimelightSubsystem extends SubsystemBase{
      * Wrapper function to uniformly calculate distance to a ground target using a limelight
      */
     public double calculateObjectDistance() {
-        return m_Limelight.calculateDistToGroundTarget(BALL_TARGET_HEIGHT / 2);
+        return m_Limelight.calculateDistToGroundTarget(OBJ_TARGET_HEIGHT / 2);
     }
 
 
@@ -81,7 +92,7 @@ public class LimelightSubsystem extends SubsystemBase{
      * Returns bottom-facing limelight object
      * @return ballLimelight object
      */
-    public Limelight getBallLimelight() {
+    public Limelight getObjectLimelight() {
         return m_Limelight;
     }
     

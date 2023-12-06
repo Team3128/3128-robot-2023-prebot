@@ -446,7 +446,10 @@ public class Constants {
             public static final double CAMERA_HEIGHT = 2;
             public static final double FRONT_DISTANCE = 2;
             public static final double TX_THRESHOLD = 4;
-            public static final double BALL_TARGET_HEIGHT = 9.5 / 2;
+            public static final double OBJ_TARGET_HEIGHT = 9.5 / 2;
+            public static final double HORIZONTAL_OFFSET_GOAL = 0;
+            public static final double OBJ_KP = 0;
+            public static final double OBJ_KD = 0;
             
 
 

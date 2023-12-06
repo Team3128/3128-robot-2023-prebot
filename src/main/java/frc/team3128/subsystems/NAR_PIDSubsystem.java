@@ -18,7 +18,7 @@ import frc.team3128.common.utility.NAR_Shuffleboard;
 /**
  * A subsystem based off of {@link PIDSubsystem} 
  * @since 2023 CHARGED UP
- * @author Mason Lam
+ * @author Mason Lam, Arav Chadha, Peter Ma
  */
 public abstract class NAR_PIDSubsystem extends SubsystemBase {
     protected final PIDController m_controller;
@@ -28,8 +28,6 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
     private BooleanSupplier debug;
     private DoubleSupplier setpoint;
     private double min, max;
-
-    private Timer testTimer = new Timer(); // TODO test - pls delete
 
     /**
      * Creates a new PIDSubsystem.
@@ -44,7 +42,6 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
         this.kG_Function = () -> 1;
         min = Double.NEGATIVE_INFINITY;
         max = Double.POSITIVE_INFINITY;
-        testTimer.start();
     }
 
     /**
@@ -68,7 +65,7 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
     }
 
     public void initShuffleboard(double kS, double kV, double kG) {
-        NAR_Shuffleboard.addComplex(getName(), "PID_Controller", this, 0, 0);
+        NAR_Shuffleboard.addSendable(getName(), "PID_Controller", m_controller, 0, 0);
 
         NAR_Shuffleboard.addData(getName(), "Enabled", ()-> isEnabled(), 1, 0);
         
@@ -85,18 +82,26 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
         this.kG = NAR_Shuffleboard.debug(getName(), "kG", kG, 3, 2);
 
         NAR_Shuffleboard.addData(getName(), "atSetpoint", ()-> atSetpoint(), 0, 2);
-        NAR_Shuffleboard.addData(getName(), "Test", NAR_Shuffleboard.entryPositions[9][1] == true, 6, 5); // TODO test - pls delete
-        NAR_Shuffleboard.addData(getName(), "FAIL", ()-> getSetpoint(), 4, 2);
+        NAR_Shuffleboard.addData(getName(), "TestSendable", NAR_Shuffleboard.entryPositions.get(getName())[0][0] == true, 6, 3); // TODO test - pls delete
+        NAR_Shuffleboard.addData(getName(), "TestData", NAR_Shuffleboard.entryPositions.get(getName())[1][0] == true, 7, 3); // TODO test - pls delete
+        NAR_Shuffleboard.addSendable(getName(), getName(), this, 4, 0);
+
+        // Print entryPositions:
+        if (getName().equals("Wrist")) { // To ensure this check is done only once
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 6; j++) {
+                NAR_Shuffleboard.addData("TESTER", "X: " + i + " Y: " + j, NAR_Shuffleboard.entryPositions.get("Drivetrain")[i][j] == true, i, j);
+                }
+            }
+        }
     }
 
-    public String testMethod() { // TODO test - pls delete
-        return testTimer.toString();
-    }
     /**
      * Returns the PIDController object controlling the subsystem
      *
      * @return The PIDController
      */
+
     public PIDController getController() {
         return m_controller;
     }

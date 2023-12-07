@@ -4,6 +4,9 @@
       "/FMSInfo": "FMSInfo",
       "/Shuffleboard/Drivetrain/Drivetrain": "Subsystem",
       "/Shuffleboard/Drivetrain/Gyro": "Gyro",
+      "/Shuffleboard/Elevator/Elevator": "Subsystem",
+      "/Shuffleboard/Elevator/PID_Controller": "PIDController",
+      "/Shuffleboard/Elevator/TEST2": "Subsystem",
       "/Shuffleboard/Field/field": "Field2d",
       "/Shuffleboard/General/Gyro": "Gyro",
       "/Shuffleboard/Vision/RCONTROLLER": "PIDController",
@@ -12,14 +15,23 @@
       "/Shuffleboard/VisionPID/RCONTROLLER": "PIDController",
       "/Shuffleboard/VisionPID/XCONTROLLER": "PIDController",
       "/Shuffleboard/VisionPID/YCONTROLLER": "PIDController",
+      "/Shuffleboard/Wrist/PID_Controller": "PIDController",
+      "/Shuffleboard/Wrist/TEST2": "Subsystem",
+      "/Shuffleboard/Wrist/Wrist": "Subsystem",
       "/Shuffleboard/intake/PID Controller": "PIDController",
       "/Shuffleboard/pivot/Pivot-PID": "PIDController",
       "/Shuffleboard/telescope/tele-PID": "PIDController",
       "/SmartDashboard/CommandScheduler": "Scheduler",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/TESTTTT": "PIDController"
     },
     "windows": {
       "/Shuffleboard/Field/field": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
         "window": {
           "visible": true
         }

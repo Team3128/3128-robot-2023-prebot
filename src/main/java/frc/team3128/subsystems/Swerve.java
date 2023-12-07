@@ -101,24 +101,25 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public void initShuffleboard() {
+    public void initShuffleboard() { // hasTarget, speed, acceleration, Single Station
         // General Tab
-        NAR_Shuffleboard.addComplex("General","Gyro",gyro,7,2,2,2);//.withWidget("Gyro");
-        NAR_Shuffleboard.addData("General","Heading",this::getHeading,1,2);
+        NAR_Shuffleboard.addSendable("General","Gyro",gyro,7,2,2,2);//.withWidget("Gyro");
+        NAR_Shuffleboard.addData("General","Heading",this::getHeading,0,0);
         // // Drivetrain Tab
         NAR_Shuffleboard.addData("Drivetrain","Pose",() -> (getPose().toString()),2,0,4,1);
-        NAR_Shuffleboard.addComplex("Drivetrain","Gyro",gyro,3,1,2,2);//.withWidget("Gyro");
+        NAR_Shuffleboard.addSendable("Drivetrain","Gyro",gyro,3,2,2,2);//.withWidget("Gyro");
         NAR_Shuffleboard.addData("Drivetrain","Yaw",this::getYaw,4,1);
         NAR_Shuffleboard.addData("Drivetrain","Pitch",this::getPitch,5,1);
         NAR_Shuffleboard.addData("Drivetrain", "Roll", this::getRoll, 0, 2);
-        NAR_Shuffleboard.addData("Drivetrain","Heading/Angle",this::getHeading,6,1);
-        NAR_Shuffleboard.addComplex("Drivetrain","Drivetrain", this,0,0);
+        // NAR_Shuffleboard.addData("Drivetrain","Heading/Angle",false,6,1); 
+        NAR_Shuffleboard.addData("Drivetrain","Heading",this::getHeading,6,1); 
+        NAR_Shuffleboard.addSendable("Drivetrain","Drivetrain", this,0,0);
         NAR_Shuffleboard.addData("Drivetrain", "ENABLE", ()-> CmdManager.ENABLE, 0, 1);
         NAR_Shuffleboard.addData("Drivetrain", "Single Station", ()-> CmdManager.SINGLE_STATION, 0, 3);
         NAR_Shuffleboard.addData("Drivetrain", "Speed", ()-> speed, 2, 1);
         NAR_Shuffleboard.addData("Drivetrain", "Acceleration", ()-> acceleration, 3, 1);
     }
-
+    
     public Pose2d getPose() {
         return new Pose2d(estimatedPose.getTranslation(), getGyroRotation2d());
     }

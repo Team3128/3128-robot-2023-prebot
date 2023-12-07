@@ -4,14 +4,24 @@ import java.util.HashMap;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team3128.subsystems.Elevator;
+import frc.team3128.subsystems.Manipulator;
+import frc.team3128.subsystems.NAR_PIDSubsystem;
+
+import static frc.team3128.Constants.ShuffleboardConstants.*;
 
 /**
  * Wrapper for {@link Shuffleboard}
@@ -49,27 +59,29 @@ public class NAR_Shuffleboard {
         }
     }
 
-    private static HashMap<String, HashMap<String, entryInfo>> tabs = new HashMap<String, HashMap<String,entryInfo>>();;
+    private static HashMap<String, HashMap<String, entryInfo>> tabs = new HashMap<String, HashMap<String,entryInfo>>();
+    public static HashMap<String, boolean[][]> entryPositions = new HashMap<String, boolean[][]>();
 
     /**
-   * Creates a new tab entry
-   *
-   * @param tabName the title of the new tab
-   */
+    * Creates a new tab entry
+    *
+    * @param tabName the title of the new tab
+    */
     private static void create_tab(String tabName) {
         tabs.put(tabName, new HashMap<String,entryInfo>());
+        entryPositions.put(tabName, new boolean[WINDOW_WIDTH][WINDOW_HEIGHT]); // TODO: added this
     }
 
     /**
-   * Displays a value in Shuffleboard
-   *
-   * @param tabName the title of the tab to select
-   * @param name the name of the entry
-   * @param data value to display
-   * @param x -coord of the entry starting from 0
-   * @param y -coord of the entry starting from 0
-   * @return simple widget that can be modified
-   */
+    * Displays a value in Shuffleboard
+    *
+    * @param tabName the title of the tab to select
+    * @param name the name of the entry
+    * @param data value to display
+    * @param x -coord of the entry starting from 0
+    * @param y -coord of the entry starting from 0
+    * @return simple widget that can be modified
+    */
     public static SimpleWidget addData(String tabName, String name, Object data, int x, int y) {
         return addData(tabName, name, data, x, y, 1, 1);
     }
@@ -102,6 +114,7 @@ public class NAR_Shuffleboard {
      */
     public static SimpleWidget addData(String tabName, String name, Supplier<Object> supply, int x, int y, int width, int height){
         if(!tabs.containsKey(tabName)) create_tab(tabName);
+        fillEntryPositions(x,y,width,height, tabName);
         if(tabs.get(tabName).containsKey(name)) {
             tabs.get(tabName).get(name).m_supply = supply;
             return tabs.get(tabName).get(name).m_entry;
@@ -112,59 +125,68 @@ public class NAR_Shuffleboard {
     }
 
     /**
-   * Displays a value in Shuffleboard
-   *
-   * @param tabName the title of the tab to select
-   * @param name the name of the entry
-   * @param data value to display
-   * @param x -coord of the entry starting from 0
-   * @param y -coord of the entry starting from 0
-   * @param width -of the entry
-   * @param height -of the entry
-   * @return simple widget that can be modified
-   */
-  public static SimpleWidget addData(String tabName, String name, Object data, int x, int y, int width, int height) {
-    if(!tabs.containsKey(tabName)) create_tab(tabName);
-    if (tabs.get(tabName).containsKey(name)) {
-        tabs.get(tabName).get(name).m_data.setValue(data);
-        return tabs.get(tabName).get(name).m_entry;
+    * Displays a value in Shuffleboard
+    *
+    * @param tabName the title of the tab to select
+    * @param name the name of the entry
+    * @param data value to display
+    * @param x -coord of the entry starting from 0
+    * @param y -coord of the entry starting from 0
+    * @param width -of the entry
+    * @param height -of the entry
+    * @return simple widget that can be modified
+    */
+
+    public static SimpleWidget addData(String tabName, String name, Object data, int x, int y, int width, int height) {
+        if(!tabs.containsKey(tabName)) create_tab(tabName);
+        fillEntryPositions(x,y,width,height,tabName);
+        if (tabs.get(tabName).containsKey(name)) {
+            tabs.get(tabName).get(name).m_data.setValue(data);
+            return tabs.get(tabName).get(name).m_entry;
+        }
+        SimpleWidget entry = Shuffleboard.getTab(tabName).add(name,data).withPosition(x, y).withSize(width,height);
+        tabs.get(tabName).put(name, new entryInfo(entry,null));
+        return entry;
     }
-    SimpleWidget entry = Shuffleboard.getTab(tabName).add(name,data).withPosition(x, y).withSize(width,height);
-    tabs.get(tabName).put(name, new entryInfo(entry,null));
-    return entry;
-}
 
     /**
-     * Displays complex values, like subsystems and command, works on all classes that extend sendable
+     * Displays sendable values, like subsystems and command, works on all classes that extend sendable
      * 
      * @param tabName the title of the tab to select
      * @param name the name of the entry
-     * @param data complex value to display
+     * @param data sendable value to display
      * @param x x-coord of the entry
      * @param y y-coord of the entry
-     * @return complex widget that can be modified
+     * @return sendable widget that can be modified
      */
-    public static ComplexWidget addComplex(String tabName, String name, Sendable data, int x, int y) {
+    public static ComplexWidget addSendable(String tabName, String name, Sendable data, int x, int y) {
+        if (data instanceof SubsystemBase) return addSendable(tabName, name, data, x, y, 2, 1);
+        if (data instanceof PIDController) return addSendable(tabName, name, data, x, y, 1, 2);
+        if (data instanceof WPI_Pigeon2) return addSendable(tabName, name, data, x, y, 2, 2);
+        return addSendable(tabName, name, data, x, y, 1, 1); // Default width and height
+    }
+
+    /**
+     * Displays sendable values, like subsystems and command, works on all classes that extend sendable
+     * 
+     * @param tabName the title of the tab to select
+     * @param name the name of the entry
+     * @param data sendable value to display
+     * @param x x-coord of the entry
+     * @param y y-coord of the entry
+     * @return sendable widget that can be modified
+     */
+    public static ComplexWidget addSendable(String tabName, String name, Sendable data, int x, int y, int width, int height) {
         try {
-            return Shuffleboard.getTab(tabName).add(name, data).withPosition(x,y);
+            if(!tabs.containsKey(tabName)) create_tab(tabName);
+            fillEntryPositions(x, y, width, height, tabName);
+    
+            return Shuffleboard.getTab(tabName).add(name, data).withPosition(x,y).withSize(width, height);
         }
         catch(Exception e) {
             return null;
         }
-    }
-
-    /**
-     * Displays complex values, like subsystems and command, works on all classes that extend sendable
-     * 
-     * @param tabName the title of the tab to select
-     * @param name the name of the entry
-     * @param data complex value to display
-     * @param x x-coord of the entry
-     * @param y y-coord of the entry
-     * @return complex widget that can be modified
-     */
-    public static ComplexWidget addComplex(String tabName, String name, Sendable data, int x, int y, int width, int height) {
-        return addComplex(tabName, name, data, x, y).withSize(width,height);
+        // return addSendable(tabName, name, data, x, y).withSize(width,height);
     }
 
     /**
@@ -236,4 +258,13 @@ public class NAR_Shuffleboard {
         }
     }
 
+    private static void fillEntryPositions(int x, int y, int width, int height, String tabName) {
+        if (x + width > WINDOW_WIDTH || y + height > WINDOW_HEIGHT) { throw new IllegalArgumentException("Widget Position Out of Bounds (" + x + "," + y + ") at Tab: " + tabName); }
+        for (int i = x; i < x + width; i++) {
+            for (int j = y; j < y + height; j++) {
+                if (entryPositions.get(tabName)[i][j]) { throw new IllegalArgumentException("Widget Position Overlapping (" + i + "," + j + ") at Tab: " + tabName); }
+                entryPositions.get(tabName)[i][j] = true;
+            }
+        }
+    }
 }

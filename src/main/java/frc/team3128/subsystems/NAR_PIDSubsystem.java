@@ -5,6 +5,12 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Ultrasonic;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3128.common.utility.NAR_Shuffleboard;
@@ -12,7 +18,7 @@ import frc.team3128.common.utility.NAR_Shuffleboard;
 /**
  * A subsystem based off of {@link PIDSubsystem} 
  * @since 2023 CHARGED UP
- * @author Mason Lam
+ * @author Mason Lam, Arav Chadha, Peter Ma
  */
 public abstract class NAR_PIDSubsystem extends SubsystemBase {
     protected final PIDController m_controller;
@@ -59,13 +65,14 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
     }
 
     public void initShuffleboard(double kS, double kV, double kG) {
-        NAR_Shuffleboard.addComplex(getName(), "PID_Controller", m_controller, 0, 0);
+        NAR_Shuffleboard.addSendable(getName(), "PID_Controller", m_controller, 0, 0);
 
         NAR_Shuffleboard.addData(getName(), "Enabled", ()-> isEnabled(), 1, 0);
+        
         NAR_Shuffleboard.addData(getName(), "Measurement", ()-> getMeasurement(), 1, 1);
         NAR_Shuffleboard.addData(getName(), "Setpoint", ()-> getSetpoint(), 1, 2);
 
-        var debugEntry = NAR_Shuffleboard.addData(getName(), "TOGGLE", false, 2, 0).withWidget("Toggle Button");
+        var debugEntry = NAR_Shuffleboard.addData(getName(), "TOGGLE", false, 2, 0).withWidget("Toggle Button"); // TODO why use var vs SimpleWidget?
         debug = ()-> debugEntry.getEntry().getBoolean(false);
         NAR_Shuffleboard.addData(getName(), "DEBUG", ()-> debug.getAsBoolean(), 2, 1);
         setpoint = NAR_Shuffleboard.debug(getName(), "Debug_Setpoint", 0, 2,2);
@@ -75,7 +82,18 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
         this.kG = NAR_Shuffleboard.debug(getName(), "kG", kG, 3, 2);
 
         NAR_Shuffleboard.addData(getName(), "atSetpoint", ()-> atSetpoint(), 0, 2);
-        NAR_Shuffleboard.addComplex(getName(), getName(), this, 4, 0);
+        NAR_Shuffleboard.addData(getName(), "TestSendable", NAR_Shuffleboard.entryPositions.get(getName())[0][0] == true, 6, 3); // TODO test - pls delete
+        NAR_Shuffleboard.addData(getName(), "TestData", NAR_Shuffleboard.entryPositions.get(getName())[1][0] == true, 7, 3); // TODO test - pls delete
+        NAR_Shuffleboard.addSendable(getName(), getName(), this, 4, 0);
+
+        // Print entryPositions:
+        if (getName().equals("Wrist")) { // To ensure this check is done only once
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 6; j++) {
+                NAR_Shuffleboard.addData("TESTER", "X: " + i + " Y: " + j, NAR_Shuffleboard.entryPositions.get("Drivetrain")[i][j] == true, i, j);
+                }
+            }
+        }
     }
 
     /**
@@ -83,6 +101,7 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
      *
      * @return The PIDController
      */
+
     public PIDController getController() {
         return m_controller;
     }

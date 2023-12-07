@@ -63,7 +63,7 @@ public abstract class NAR_ProfiledPIDSubsystem extends SubsystemBase {
     }
 
     private void initShuffleboard(double kS, double kV, double kG) {
-        NAR_Shuffleboard.addComplex(getName(), "PID_Controller", m_controller, 0, 0);
+        NAR_Shuffleboard.addSendable(getName(), "PID_Controller", m_controller, 0, 0);
 
         NAR_Shuffleboard.addData(getName(), "Enabled", ()-> isEnabled(), 1, 0);
         NAR_Shuffleboard.addData(getName(), "Measurement", ()-> getMeasurement(), 1, 1);

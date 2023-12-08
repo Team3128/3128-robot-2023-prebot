@@ -47,7 +47,7 @@ public class AutoPrograms {
     }
 
     public Command getAutonomousCommand() {
-        String selectedAutoName = NarwhalDashboard.getSelectedAutoName();
+        // String selectedAutoName = NarwhalDashboard.getSelectedAutoName();
         Command autoCommand;
 
         // if (selectedAutoName == null) {

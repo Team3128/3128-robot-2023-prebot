@@ -1,0 +1,42 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.69,
+      "y": 0.39
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreConeHigh"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pickup 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PickupCube"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score 1"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null
+}

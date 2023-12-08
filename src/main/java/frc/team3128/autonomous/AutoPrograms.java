@@ -13,6 +13,9 @@ import frc.team3128.common.narwhaldashboard.NarwhalDashboard;
 import static frc.team3128.Constants.AutoConstants.MODULARIZED_AUTOS;
 import static frc.team3128.commands.CmdManager.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * Class to store information about autonomous routines.
  * @author Daniel Wang, Mason Lam
@@ -45,23 +48,27 @@ public class AutoPrograms {
 
     public Command getAutonomousCommand() {
         String selectedAutoName = NarwhalDashboard.getSelectedAutoName();
-        final Command autoCommand;
+        Command autoCommand;
 
-        if (selectedAutoName == null) {
-            autoCommand = score(Position.HIGH_CONE, true);
-        }
+        // if (selectedAutoName == null) {
+        //     autoCommand = score(Position.HIGH_CONE, true);
+        // }
 
-        else if (selectedAutoName == "scuffedClimb") {
-            autoCommand = sequence(
-                score(Position.HIGH_CONE, true),
-                new CmdAutoBalance(false)
-            );
-        }
+        // else if (selectedAutoName == "scuffedClimb") {
+        //     autoCommand = sequence(
+        //         score(Position.HIGH_CONE, true),
+        //         new CmdAutoBalance(false)
+        //     );
+        // }
 
-        else {
-            selectedAutoName = ((DriverStation.getAlliance() == Alliance.Red) ? "r_" : "b_") + selectedAutoName;
-            autoCommand = Trajectories.get(MODULARIZED_AUTOS.get(selectedAutoName));
-        }
+        // else {
+        //     selectedAutoName = ((DriverStation.getAlliance() == Alliance.Red) ? "r_" : "b_") + selectedAutoName;
+        //     autoCommand = Trajectories.get(MODULARIZED_AUTOS.get(selectedAutoName));
+        //     if (autoCommand == null) {
+        //         autoCommand = Trajectories.get(Trajectories.stringToList(selectedAutoName));
+        //     }
+        // }
+        autoCommand = Trajectories.get(Arrays.asList("Test"));
 
         return autoCommand.beforeStarting(Trajectories.resetAuto());
     }

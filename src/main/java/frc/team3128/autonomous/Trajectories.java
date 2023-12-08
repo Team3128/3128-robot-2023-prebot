@@ -86,6 +86,7 @@ public class Trajectories {
                 trajectories.put(trajectoryName, PathPlanner.loadPathGroup(trajectoryName, fast));
             }
         }
+        trajectories.put("Test", PathPlanner.loadPathGroup("Test", fast));
 
         builder = new SwerveAutoBuilder(
             swerve::getPose,
@@ -116,7 +117,7 @@ public class Trajectories {
     }
 
     // conjoins list of strings into one complete trajectory
-    public static CommandBase get(ArrayList<String> names) {
+    public static CommandBase get(List<String> names) {
         ArrayList<PathPlannerTrajectory> curTrajectories = new ArrayList<PathPlannerTrajectory>();
         for (String name : names) {
             for (PathPlannerTrajectory curTrajectory : trajectories.get(name)) {

@@ -1,6 +1,8 @@
 package frc.team3128;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
 
@@ -12,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.team3128.autonomous.Trajectories;
 import frc.team3128.common.hardware.camera.Camera;
 
 import frc.team3128.common.swerveNeo.SwerveModuleConstants;
@@ -73,7 +76,16 @@ public class Constants {
         public static final double ANGLE_THRESHOLD = 8; //7, 9
         public static final double VELOCITY_THRESHOLD = 4; //6, 3
         public static final double RAMP_THRESHOLD = 9; //8, 10
-        public static final double DRIVE_SPEED = Units.inchesToMeters(20); //30, 40
+        public static final double DRIVE_SPEED = Units.inchesToMeters(30); //30, 40
+
+        // HashMap to convert auto name into a list of modularized autos
+        public static final HashMap<String, ArrayList<String>> MODULARIZED_AUTOS = new HashMap<String, ArrayList<String>>();
+
+        // Put other autos when needed
+        static {
+            MODULARIZED_AUTOS.put("b-cable_1Cone+1Cube", Trajectories.stringToList("b-cable_pickup-Cube1&score-Cube1"));
+            MODULARIZED_AUTOS.put("b_hp_1Cone+1.5Cube", Trajectories.stringToList("b-hp_pickup-Cube4&score-Cube4&pickup-Cube3&return-Cube3"));
+        }
 
     }
 
@@ -356,7 +368,7 @@ public class Constants {
         public static final int MIN_ANGLE = -90;
         public static final int MAX_ANGLE = 90;
 
-        public static final double WRIST_TOLERANCE = 0.5;
+        public static final double WRIST_TOLERANCE = 1;
 
         public static final int WRIST_ID = 21;
         
@@ -377,13 +389,13 @@ public class Constants {
         public static final int ELV1_ID = 11;
         public static final int ELV2_ID = 12;
 
-        public static final double kP = 1;
+        public static final double kP = 1.5;
         public static final double kI = 0;
         public static final double kD = 0;
 
-        public static final double kS = 0.2375; //0.975; //1.05;
+        public static final double kS = 0.575;//0.2375; //0.975; //1.05;
         public static final double kV = 0;
-        public static final double kG = 0.4125;//0.975;
+        public static final double kG = 0.725;//0.4125;//0.975; 1.35;
 
         public static final double MIN_DIST = 2; //Ask Charlie
         public static final double MAX_DIST = 55; //Ask Charlie

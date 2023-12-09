@@ -27,6 +27,7 @@ public class LimelightSubsystem extends SubsystemBase{
         addPlateau = () -> Math.abs(getObjectTX()) <= 3 && getObjectHasValidTarget();
         Pipeline p_both = Pipeline.BOTH;
         m_Limelight.setPipeline(p_both);
+        initShuffleboard();
     }
     // public void setElement(boolean isCone){
     //     Pipeline p_cone = Pipeline.CONE;

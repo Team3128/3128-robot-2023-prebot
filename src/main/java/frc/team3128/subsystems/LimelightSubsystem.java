@@ -25,17 +25,19 @@ public class LimelightSubsystem extends SubsystemBase{
         m_Limelight = new Limelight("limelight-blob", CAMERA_ANGLE, CAMERA_HEIGHT, FRONT_DISTANCE);
         isAligned = () -> Math.abs(getObjectTX()) <= TX_THRESHOLD && getObjectHasValidTarget();
         addPlateau = () -> Math.abs(getObjectTX()) <= 3 && getObjectHasValidTarget();
+        Pipeline p_both = Pipeline.BOTH;
+        m_Limelight.setPipeline(p_both);
     }
-    public void setElement(boolean isCone){
-        Pipeline p_cone = Pipeline.CONE;
-        Pipeline p_cube = Pipeline.CUBE;
-        if (isCone) {
-            m_Limelight.setPipeline(p_cone);
-        }
-        else{
-            m_Limelight.setPipeline(p_cube);
-        }
-    }
+    // public void setElement(boolean isCone){
+    //     Pipeline p_cone = Pipeline.CONE;
+    //     Pipeline p_cube = Pipeline.CUBE;
+    //     if (isCone) {
+    //         m_Limelight.setPipeline(p_cone);
+    //     }
+    //     else{
+    //         m_Limelight.setPipeline(p_cube);
+    //     }
+    // }
 
     public static synchronized LimelightSubsystem getInstance() {
         if (instance == null) {

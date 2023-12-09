@@ -11,7 +11,8 @@ public enum LimelightKey {
     FITTED_LONG("tlong"),
     LENGTH_HORIZONTAL("thor"),
     LENGTH_VERTICAL("tvert"),
-    PIPELINE("getpipe");
+    PIPELINE("getpipe"),
+    CUSTOM_DATA("llpython");
 
     private String key;
     private LimelightKey(String key) {

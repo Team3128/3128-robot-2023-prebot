@@ -53,8 +53,15 @@ public class Limelight {
      * @return
      */
     public double getValue(LimelightKey key) {
+
         return limelightTable.getEntry(key.getKey()).getDouble(0.0);
+
     }
+
+    public double[] getCustomData(){
+        return limelightTable.getEntry("llpython").getDoubleArray(new double[0]);
+    }
+
 
     public double getValueAverage(LimelightKey key, int numSamples) {
         double runningTotal = 0;
@@ -72,6 +79,7 @@ public class Limelight {
     public boolean hasValidTarget() {
         return getValue(LimelightKey.VALID_TARGET) > 0.99;
     }
+
 
     public double calculateDistToTopTarget(double targetHeight) {
         if (!hasValidTarget())

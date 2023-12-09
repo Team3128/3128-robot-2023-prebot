@@ -77,7 +77,7 @@ public class LimelightSubsystem extends SubsystemBase{
     public boolean getisCone() {
         double[] data = m_Limelight.getCustomData();
         return data[0] == 1.00;
-        }
+        
 
     }
 

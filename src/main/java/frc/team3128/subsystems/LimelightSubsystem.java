@@ -48,6 +48,7 @@ public class LimelightSubsystem extends SubsystemBase{
         // General Tab
         NAR_Shuffleboard.addData("General", "Range", this::calculateObjectDistance, 1, 3);
         NAR_Shuffleboard.addData("General", "hasValidTarget", this.getObjectHasValidTarget(), 2, 2);
+        NAR_Shuffleboard.addData("General", "isCone", this.getisCone(), 2, 2);
         NAR_Shuffleboard.addData("General", "ty", this.getObjectTY(), 4, 1);
         NAR_Shuffleboard.addData("General", "tx", this.getObjectTX(), 3, 1);
         NAR_Shuffleboard.addComplex("General", "LimelightInfo", this, 0,0);
@@ -72,6 +73,16 @@ public class LimelightSubsystem extends SubsystemBase{
      */
     public double getObjectTX() {
         return m_Limelight.getValue(LimelightKey.HORIZONTAL_OFFSET);
+    }
+    public boolean getisCone() {
+        private double[] data = m_Limelight.getCustomData();
+        if(data[0]== 0.0){
+            return False;
+        }
+        else if(data[0]==1.0){
+            return True;
+        }
+
     }
 
     /**

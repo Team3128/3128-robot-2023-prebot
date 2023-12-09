@@ -32,7 +32,7 @@ def runPipeline(image, llrobot):
         # draw the unrotated bounding box
         cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,255),2)
         # record some color data to send
-        c = 1
+        c = 1.0
         llpython = [c,x,y,w,h,9,8,7]
   
     # make sure to return a contour,

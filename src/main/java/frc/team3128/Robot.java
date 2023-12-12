@@ -4,6 +4,9 @@
 
 package frc.team3128;
 
+import common.core.NAR_Robot;
+import common.utility.narwhaldashboard.NarwhalDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -18,17 +21,24 @@ import frc.team3128.commands.CmdManager;
 import frc.team3128.subsystems.Leds;
 import frc.team3128.subsystems.Swerve;
 
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import java.time.LocalDateTime;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation.
  */
-public class Robot extends TimedRobot {
+public class Robot extends NAR_Robot {
     public static Robot instance;
 
-    public static RobotContainer m_robotContainer = new RobotContainer();
+    public static RobotContainer m_robotContainer;
     public static AutoPrograms autoPrograms = new AutoPrograms();
     public Timer xLockTimer = new Timer();
     public double startTime;
+
+    private boolean isTeleRunning = false;
 
     public static synchronized Robot getInstance() {
         if (instance == null) {
@@ -39,8 +49,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit(){
+        m_robotContainer = new RobotContainer();
+
         new Trigger(this::isEnabled).negate().debounce(2).onTrue(new InstantCommand(()-> Swerve.getInstance().setBrakeMode(false)).ignoringDisable(true));
         m_robotContainer.init();
+
         LiveWindow.disableAllTelemetry();
     }
 
@@ -56,6 +69,20 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
         }
+
+
+        // uncomment for Advantage Scope logging during full matches
+        // isTeleRunning = false;
+        // Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/" + "matches/" + DriverStation.getMatchType() + "--" + DriverStation.getMatchNumber() + ".wpilog"));
+        // // logger.addDataReceiver(new NT4Publisher());
+        // Logger.getInstance().start();
+
+        
+        // uncomment for Advantage Scope logging during autos ONLY
+        // isTeleRunning = false;
+        // Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/" + "autos/" + NarwhalDashboard.getInstance().getSelectedAuto() + "--" + LocalDateTime.now() + ".wpilog"));
+        // // logger.addDataReceiver(new NT4Publisher());
+        // Logger.getInstance().start();
     }
 
     @Override
@@ -63,6 +90,9 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         if (xLockTimer.hasElapsed(14.75)) {
             new RunCommand(()->Swerve.getInstance().xlock(), Swerve.getInstance()).schedule();
+
+            // uncomment for Advantage Scope logging during autos ONLY
+            //Logger.getInstance().end();
         }
     }
 
@@ -72,6 +102,12 @@ public class Robot extends TimedRobot {
         Leds.getInstance().resetLeds();
         xLockTimer.restart();
         CommandScheduler.getInstance().cancelAll();
+        
+        // uncomment for Advantage Scope logging during teleop ONLY
+        isTeleRunning = true;
+        Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/" + "teleops/" + "--" + LocalDateTime.now() + ".wpilog"));
+        // logger.addDataReceiver(new NT4Publisher());
+        Logger.getInstance().start();
     }
 
     @Override
@@ -79,6 +115,9 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run();
         if (xLockTimer.hasElapsed(134.75)) {
             // new RunCommand(()-> Swerve.getInstance().xlock(), Swerve.getInstance()).schedule();
+
+            // uncomment for Advantage Scope logging during full matches
+            // Logger.getInstance().end();
         }
     }
 
@@ -99,6 +138,9 @@ public class Robot extends TimedRobot {
     
     @Override
     public void disabledPeriodic() {
-
+        if(isTeleRunning){
+            Logger.getInstance().end();
+        }
     }
+
 }

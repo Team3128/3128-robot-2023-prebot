@@ -27,6 +27,8 @@ import frc.team3128.common.utility.NAR_Shuffleboard;
 import static frc.team3128.Constants.SwerveConstants.*;
 import static frc.team3128.Constants.VisionConstants.*;
 
+import org.littletonrobotics.junction.Logger;
+
 public class Swerve extends SubsystemBase {
 
     private static Swerve instance;
@@ -172,6 +174,9 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         odometry.update(getGyroRotation2d(), getPositions());
         estimatedPose = odometry.getEstimatedPosition();
+
+        Logger.getInstance().recordOutput("Swerve-Pose", getPose());
+        
         for (SwerveModule module : modules) {
             SmartDashboard.putNumber("module " + module.moduleNumber, module.getCanCoder().getDegrees());
         }

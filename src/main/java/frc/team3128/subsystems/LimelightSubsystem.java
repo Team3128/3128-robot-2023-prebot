@@ -50,14 +50,16 @@ public class LimelightSubsystem extends SubsystemBase{
     public void initShuffleboard() {
         // General Tab
         NAR_Shuffleboard.addData("General", "Range", this::calculateObjectDistance, 1, 3);
-        NAR_Shuffleboard.addData("General", "hasValidTarget", this.getObjectHasValidTarget(), 2, 2);
-        NAR_Shuffleboard.addData("General", "isCone", this.getisCone(), 2, 2);
-        NAR_Shuffleboard.addData("General", "ty", this.getObjectTY(), 4, 1);
-        NAR_Shuffleboard.addData("General", "tx", this.getObjectTX(), 3, 1);
+        NAR_Shuffleboard.addData("General", "hasValidTarget", this::getObjectHasValidTarget, 2, 2);
+        NAR_Shuffleboard.addData("General", "isCone", this::getisCone, 2, 2);
+        NAR_Shuffleboard.addData("General", "isCube", this::getisCube, 2, 2);
+        NAR_Shuffleboard.addData("General", "isGeneral", this::getisGeneral, 2, 2);
+        NAR_Shuffleboard.addData("General", "ty", this::getObjectTY, 4, 1);
+        NAR_Shuffleboard.addData("General", "tx", this::getObjectTX, 3, 1);
         NAR_Shuffleboard.addComplex("General", "LimelightInfo", this, 0,0);
         // Limelight Tab
-        NAR_Shuffleboard.addData("Limelight", "ty", this.getObjectTY(), 4, 1);
-        NAR_Shuffleboard.addData("Limelight", "tx", this.getObjectTX(), 3, 1);
+        NAR_Shuffleboard.addData("Limelight", "ty", this::getObjectTY, 4, 1);
+        NAR_Shuffleboard.addData("Limelight", "tx", this::getObjectTX, 3, 1);
         NAR_Shuffleboard.addComplex("Limelight", "LimelightInfo", this, 0,0);
 
     }
@@ -86,7 +88,7 @@ public class LimelightSubsystem extends SubsystemBase{
         return data2[1] == 0.00;
     }
 
-    public boolean getGeneral() {
+    public boolean getisGeneral() {
         double[] data3 = m_Limelight.getCustomData();
         return data3[2] == 2.00;
         

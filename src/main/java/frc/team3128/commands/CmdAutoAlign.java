@@ -39,7 +39,7 @@ public class CmdAutoAlign extends CommandBase {
        public void execute() {
         switch (targetState) {
             case SEARCHING:
-            m_limelight.getGeneral();
+            m_limelight.getisGeneral();
             if (m_limelight.getObjectHasValidTarget()) {
                 targetCount ++;
             }

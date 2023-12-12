@@ -1,10 +1,12 @@
 package frc.team3128.commands;
+import static frc.team3128.Constants.AutoConstants.rotationKD;
 import static frc.team3128.Constants.LimelightConstants.HORIZONTAL_OFFSET_GOAL;
 import static frc.team3128.Constants.LimelightConstants.OBJ_KD;
 import static frc.team3128.Constants.LimelightConstants.OBJ_KP;
 import static frc.team3128.Constants.LimelightConstants.TX_THRESHOLD;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3128.subsystems.LimelightSubsystem;
@@ -37,7 +39,7 @@ public class CmdAutoAlign extends CommandBase {
        public void execute() {
         switch (targetState) {
             case SEARCHING:
-            m_limelight.setElement(false);
+            m_limelight.getGeneral();
             if (m_limelight.getObjectHasValidTarget()) {
                 targetCount ++;
             }
@@ -73,14 +75,20 @@ public class CmdAutoAlign extends CommandBase {
                 power = power + OBJ_KD * (previous_error - current_error) / (previousTime - currentTime);
                 
                 power = MathUtil.clamp(power, -1, 1);
-                
-                m_swerve.drive(power, )
+                m_swerve.drive(new Translation2d(4,0), power, false);
+
             }
 
+            case BLIND:
+            m_swerve.drive(new Translation2d(0, 0), 3, false); 
 
+            if (m_limelight.getObjectHasValidTarget()) {
+                targetState = detectionStates.SEARCHING;
+            }
 
         }
-        }
+
+    }
         
        
 
@@ -93,7 +101,7 @@ public class CmdAutoAlign extends CommandBase {
 
        @Override
        public void end(boolean interrupted) {
-
+        m_swerve.stop();
        }
 
     

@@ -75,13 +75,17 @@ public class LimelightSubsystem extends SubsystemBase{
         return m_Limelight.getValue(LimelightKey.HORIZONTAL_OFFSET);
     }
     public boolean getisCone() {
-        private double[] data = m_Limelight.getCustomData();
-        if(data[0]== 0.0){
-            return False;
-        }
-        else if(data[0]==1.0){
-            return True;
-        }
+        double[] data = m_Limelight.getCustomData();
+        return data[0] == 1.00;
+    }
+    public boolean getisCube() {
+        double[] data2 = m_Limelight.getCustomData();
+        return data2[1] == 0.00;
+    }
+
+    public boolean getGeneral() {
+        double[] data3 = m_Limelight.getCustomData();
+        return data3[2] == 2.00;
 
     }
 

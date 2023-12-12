@@ -24,8 +24,8 @@ def runPipeline(image, llrobot):
     img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     # convert the hsv to a binary image by removing any pixels
     # that do not fall within the following HSV Min/Max values
-    yellow_low = np.array([15,229,132])
-    yellow_high = np.array([29,255,255])
+    yellow_low = np.array([17,235,181]) # [15,229,132]
+    yellow_high = np.array([27,255,245]) # [29,255,255]
     purple_low = np.array([113,82,77])
     purple_high = np.array([139,216,200])
     img_thresholdy = cv2.inRange(img_hsv, yellow_low, yellow_high)

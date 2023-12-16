@@ -73,6 +73,10 @@ public class Limelight {
         return runningTotal / numSamples;
     }
 
+    public double getArea() {
+        return getValue(LimelightKey.AREA);
+    }
+
     /**
      * Checks to see if the Limelight has a valid target
      */

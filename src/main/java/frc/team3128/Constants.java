@@ -450,10 +450,7 @@ public class Constants {
             public static final double HORIZONTAL_OFFSET_GOAL = 0;
             public static final double OBJ_KP = 0;
             public static final double OBJ_KD = 0;
-            
-
-
-
+            public static final double MIN_AREA = 1000;
         }
 
 }

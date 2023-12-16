@@ -106,7 +106,13 @@ public class LimelightSubsystem extends SubsystemBase{
      * Wrapper function to get if the ball limelight has a valid target
      */
     public boolean getObjectHasValidTarget() {
-        return m_Limelight.hasValidTarget();
+
+        if(Limelight.getArea()> MIN_AREA){
+            return m_Limelight.hasValidTarget();
+        }
+        else{
+            return false;
+        }
     }
     
     /**

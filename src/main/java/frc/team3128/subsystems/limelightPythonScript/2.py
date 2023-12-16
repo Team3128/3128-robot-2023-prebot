@@ -49,7 +49,7 @@ def runPipeline(image, llrobot):
             largestContoury = max(contoursy, key=cv2.contourArea) 
             if np.array_equal(largestContour,largestContoury):
                 c = 1.0 # true for cone
-                print("Cone")
+                # print("Cone")
         if (len(contoursp)>0):
             largestContourp = max(contoursp, key=cv2.contourArea)
             if np.array_equal(largestContour,largestContourp) :

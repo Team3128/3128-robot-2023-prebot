@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -14,16 +14,21 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import frc.team3128.PositionConstants.Position;
 import frc.team3128.autonomous.Trajectories;
 import frc.team3128.common.hardware.camera.Camera;
 
 import frc.team3128.common.swerveNeo.SwerveModuleConstants;
+import frc.team3128.subsystems.Swerve;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import static frc.team3128.commands.CmdManager.*;
 
 
 public class Constants {
@@ -60,8 +65,8 @@ public class Constants {
         public static final double slowSpeed = 1.5;
         public static final double slowAcceleration = 2;
 
-        public static final PathConstraints fast = new PathConstraints(SwerveConstants.maxSpeed, SwerveConstants.maxAcceleration); 
-        public static final PathConstraints slow = new PathConstraints(slowSpeed, slowAcceleration);
+        // public static final PathConstraints fast = new PathConstraints(SwerveConstants.maxSpeed, SwerveConstants.maxAcceleration, SwerveConstants.maxAngularVelocity, SwerveConstants.max); 
+        // public static final PathConstraints slow = new PathConstraints(slowSpeed, slowAcceleration);
 
         /* Translation PID Values */
         public static final double translationKP = 3;
@@ -78,13 +83,16 @@ public class Constants {
         public static final double RAMP_THRESHOLD = 9; //8, 10
         public static final double DRIVE_SPEED = Units.inchesToMeters(30); //30, 40
 
-        // HashMap to convert auto name into a list of modularized autos
-        public static final HashMap<String, ArrayList<String>> MODULARIZED_AUTOS = new HashMap<String, ArrayList<String>>();
+        public static final HashMap<String, Command> CHOREO_HASH_MAP = new HashMap<String, Command>();
 
-        // Put other autos when needed
         static {
-            MODULARIZED_AUTOS.put("b-cable_1Cone+1Cube", Trajectories.stringToList("b-cable_pickup-Cube1&score-Cube1"));
-            MODULARIZED_AUTOS.put("b_hp_1Cone+1.5Cube", Trajectories.stringToList("b-hp_pickup-Cube4&score-Cube4&pickup-Cube3&return-Cube3"));
+            CHOREO_HASH_MAP.put("Test", Commands.sequence(
+                score(Position.HIGH_CONE, true),
+                Trajectories.getChoreoPath("Pickup1"),
+                pickup(Position.GROUND_CUBE, true),
+                Trajectories.getChoreoPath("Score1"),
+                score(Position.LOW, true)
+            ));
         }
 
     }

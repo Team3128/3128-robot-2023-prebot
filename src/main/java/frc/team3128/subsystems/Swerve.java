@@ -89,6 +89,14 @@ public class Swerve extends SubsystemBase {
         setModuleStates(moduleStates);
     }
 
+    public void setSwerve(ChassisSpeeds speeds) {
+        setModuleStates(swerveKinematics.toSwerveModuleStates(speeds));
+    }
+
+    public ChassisSpeeds getChasisSpeeds() {
+        return swerveKinematics.toChassisSpeeds(getStates());
+    }
+
     public void stop() {
         for (SwerveModule module : modules) {
             module.stop();

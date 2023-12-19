@@ -1,14 +1,20 @@
 package frc.team3128.autonomous;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPlannerTrajectory;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,97 +40,94 @@ import frc.team3128.subsystems.Swerve;
  */
 public class Trajectories {
 
-    private static final HashMap<String, List<PathPlannerTrajectory>> trajectories = new HashMap<String, List<PathPlannerTrajectory>>();
-
-    private static final HashMap<String, Command> CommandEventMap = new HashMap<String, Command>();
-
     private static final Swerve swerve = Swerve.getInstance();
 
-    private static SwerveAutoBuilder builder;
-
     public static void initTrajectories() {
-        // modularized autos
-        final String[] trajectoryNames = {
-                                        //Blue Autos
-                                            //Cable
-                                            "b-cable_pickup-Cube1", "b-cable_score-Cube1","b-cable_pickup-Cube2","b-cable_return-Cube2",
-                                            //Mid
-                                            "b-mid_pickup-Cube2","b-mid_score-Cube2","b-mid_balance",
-                                            //Hp
-                                            "b-hp_pickup-Cube4","b-hp_score-Cube4","b-hp_pickup-Cube3","b-hp_return-Cube3",
-                                            
-                                        //Red Autos
-                                        // add autos if needed
-                                            //Cable
-                                            "r-cable_pickup-Cube1",
-                                            //Mid
-                                            "r-mid_pickup-Cube2",
-                                            //Hp
-                                            "r-hp_pickup-Cube4", 
-                                        };
 
-        CommandEventMap.put("ScoreConeHigh", sequence(score(Position.HIGH_CONE, true)));
+        NamedCommands.registerCommand("ScoreConeHigh", score(Position.HIGH_CONE, true));
+        NamedCommands.registerCommand("ScoreCubeHigh", score(Position.HIGH_CUBE, true));
+        NamedCommands.registerCommand("ScoreLow", score(Position.LOW, true));
+        NamedCommands.registerCommand("PickupCube", pickup(Position.GROUND_CUBE, true));
+        NamedCommands.registerCommand("Neutral", sequence(stopManip(), retract(Position.NEUTRAL)));
+        NamedCommands.registerCommand("Balance", new ScheduleCommand(new CmdAutoBalance(true)));
+        NamedCommands.registerCommand("Balance2", new ScheduleCommand(new CmdAutoBalance(false)));
 
-        CommandEventMap.put("ScoreCubeHigh", score(Position.HIGH_CUBE, true));
+        // CommandEventMap.put("ScoreConeHigh", sequence(score(Position.HIGH_CONE, true)));
+        // CommandEventMap.put("ScoreCubeHigh", score(Position.HIGH_CUBE, true));
+        // CommandEventMap.put("ScoreLow", score(Position.LOW, true));
+        // CommandEventMap.put("PickupCube", pickup(Position.GROUND_CUBE, true));
+        // CommandEventMap.put("Neutral", sequence(stopManip(), retract(Position.NEUTRAL)));
+        // CommandEventMap.put("Balance", new ScheduleCommand(new CmdAutoBalance(true)));
+        // CommandEventMap.put("Balance2", new ScheduleCommand(new CmdAutoBalance(false)));
 
-        CommandEventMap.put("ScoreLow", score(Position.LOW, true));
-        
-        CommandEventMap.put("PickupCube", pickup(Position.GROUND_CUBE, true));
+        // for (final String pathName : pathNames) {
+        //     PathPlanner.load
+        // }
 
-        CommandEventMap.put("Neutral", sequence(retract(Position.NEUTRAL)));
-        
-        CommandEventMap.put("Balance", new ScheduleCommand(new CmdAutoBalance(true)));
-        
-        CommandEventMap.put("Balance2", new ScheduleCommand(new CmdAutoBalance(false)));
+        // for (final String trajectoryName : trajectoryNames) {
 
-        for (final String trajectoryName : trajectoryNames) {
+        //     if (trajectoryName.contains("mid")) {
+        //         trajectories.put(trajectoryName, PathPlanner.loadPathGroup(trajectoryName, slow));
+        //     } 
+        //     else {
+        //         trajectories.put(trajectoryName, PathPlanner.loadPathGroup(trajectoryName, fast));
+        //     }
+        // }
 
-            if (trajectoryName.contains("mid")) {
-                trajectories.put(trajectoryName, PathPlanner.loadPathGroup(trajectoryName, slow));
-            } 
-            else {
-                trajectories.put(trajectoryName, PathPlanner.loadPathGroup(trajectoryName, fast));
-            }
-        }
-        trajectories.put("Test", PathPlanner.loadPathGroup("Test", fast));
-
-        builder = new SwerveAutoBuilder(
+        AutoBuilder.configureHolonomic(
             swerve::getPose,
             swerve::resetOdometry,
-            swerveKinematics,
-            new PIDConstants(translationKP, translationKI, translationKD),
-            new PIDConstants(rotationKP, rotationKI, rotationKD),
-            swerve::setModuleStates,
-            CommandEventMap,
+            swerve::getChasisSpeeds,
+            swerve::setSwerve,
+            new HolonomicPathFollowerConfig(
+                new PIDConstants(translationKP, translationKI, translationKD),
+                new PIDConstants(rotationKP, rotationKI, rotationKD),
+                maxSpeed,
+                trackWidth,
+                new ReplanningConfig(false, false)
+            ),
             swerve
         );
+        // builder = new AutoBuilder(
+        //     swerve::getPose,
+        //     swerve::resetOdometry,
+        //     swerveKinematics,
+        //     new PIDConstants(translationKP, translationKI, translationKD),
+        //     new PIDConstants(rotationKP, rotationKI, rotationKD),
+        //     swerve::setModuleStates,
+        //     CommandEventMap,
+        //     swerve
+        // );
     }
 
-    public static CommandBase generateAuto(PathPlannerTrajectory trajectory) {
-        return builder.fullAuto(trajectory);
+    // public static CommandBase generateAuto(PathPlannerTrajectory trajectory) {
+    //     return builder.fullAuto(trajectory);
+    // }
+
+    // public static CommandBase get(String name) {
+    //     return builder.fullAuto(trajectories.get(name));
+    // }
+
+    public static Command getPathPlannerAuto(String name) {
+        return new PathPlannerAuto(name);
     }
 
-    // Separates auto strings into a list of strings containing the prefix (e.g. b-hp) along with as many suffixes (e.g. pickup-Cube1)
-    // Ex: "b-cable_pickup-Cube1&score-Cube1" -> {"b-cable_pickup-Cube1", "b-cable_score-Cube1"}
-    public static ArrayList<String> stringToList(String name) {
-        String prefix = name.split("_")[0];
-        String[] autoStrings = name.split("_")[1].split("&");
-        ArrayList<String> ret = new ArrayList<String>();
-        for (String curAuto : autoStrings) {
-            ret.add(prefix + "_" + curAuto);
-        }
-        return ret;
+    public static Command getChoreoAuto(String name) {
+        return CHOREO_HASH_MAP.get(name);
     }
 
-    // conjoins list of strings into one complete trajectory
-    public static CommandBase get(List<String> names) {
-        ArrayList<PathPlannerTrajectory> curTrajectories = new ArrayList<PathPlannerTrajectory>();
-        for (String name : names) {
-            for (PathPlannerTrajectory curTrajectory : trajectories.get(name)) {
-                curTrajectories.add(curTrajectory);
-            }
-        }
-        return builder.fullAuto(curTrajectories);
+    public static Command getChoreoPath(String name) {
+        ChoreoTrajectory traj = Choreo.getTrajectory("Test");
+        return Choreo.choreoSwerveCommand(
+            traj,
+            swerve::getPose, 
+            new PIDController(translationKP, translationKI, translationKD),
+            new PIDController(translationKP, translationKI, translationKD),
+            new PIDController(rotationKP, rotationKI, rotationKD),
+            swerve::setSwerve,
+            true,
+            swerve
+        );
     }
 
     public static CommandBase resetAuto() {
@@ -132,8 +135,8 @@ public class Trajectories {
             runOnce(()-> Leds.getInstance().defaultColor = Colors.AUTO),
             resetLeds(),
             resetGyro(DriverStation.getAlliance() == Alliance.Red ? 0 : 180),
-            runOnce(()-> Manipulator.getInstance().set(-0.4), Manipulator.getInstance()),
-            runOnce(()-> Manipulator.getInstance().isCone = true),
+            runOnce(()-> Manipulator.getInstance().set(-0.5), Manipulator.getInstance()),
+            runOnce(()-> Manipulator.isCone = true),
             resetAll(),
             retract(Position.NEUTRAL)
         );

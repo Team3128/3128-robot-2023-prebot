@@ -58,6 +58,7 @@ public class CmdAutoAlign extends CommandBase {
                 //fpga thing??
                 targetState = detectionStates.FEEDBACK;
                 previousTime = Timer.getFPGATimestamp();
+                m_limelight.initShuffleboard();
             }
             
             case FEEDBACK:

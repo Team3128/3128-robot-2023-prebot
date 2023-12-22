@@ -29,16 +29,6 @@ public class LimelightSubsystem extends SubsystemBase{
         m_Limelight.setPipeline(p_both);
         initShuffleboard();
     }
-    // public void setElement(boolean isCone){
-    //     Pipeline p_cone = Pipeline.CONE;
-    //     Pipeline p_cube = Pipeline.CUBE;
-    //     if (isCone) {
-    //         m_Limelight.setPipeline(p_cone);
-    //     }
-    //     else{
-    //         m_Limelight.setPipeline(p_cube);
-    //     }
-    // }
 
     public static synchronized LimelightSubsystem getInstance() {
         if (instance == null) {
@@ -48,7 +38,7 @@ public class LimelightSubsystem extends SubsystemBase{
     }
 
     public void initShuffleboard() {
-        // General Tab
+        // data that will appear under General Tab
         NAR_Shuffleboard.addData("General", "Range", this::calculateObjectDistance, 1, 3);
         NAR_Shuffleboard.addData("General", "hasValidTarget", this::getObjectHasValidTarget, 2, 2);
         NAR_Shuffleboard.addData("General", "isCone", this::getisCone, 2, 2);
@@ -57,7 +47,7 @@ public class LimelightSubsystem extends SubsystemBase{
         NAR_Shuffleboard.addData("General", "ty", this::getObjectTY, 4, 1);
         NAR_Shuffleboard.addData("General", "tx", this::getObjectTX, 3, 1);
         NAR_Shuffleboard.addComplex("General", "LimelightInfo", this, 0,0);
-        // Limelight Tab
+        // data that will appear under Limelight Tab
         NAR_Shuffleboard.addData("Limelight", "ty", this::getObjectTY, 4, 1);
         NAR_Shuffleboard.addData("Limelight", "tx", this::getObjectTX, 3, 1);
         NAR_Shuffleboard.addComplex("Limelight", "LimelightInfo", this, 0,0);
@@ -65,29 +55,31 @@ public class LimelightSubsystem extends SubsystemBase{
     }
 
     
-    /**
-     * Wrapper function to uniformly calculate distance to a ground target using a limelight
-     */
+    
+    //method to uniformly calculate distance to a ground target using a limelight
+     
     public double calculateObjectDistance() {
         return m_Limelight.calculateDistToGroundTarget(OBJ_TARGET_HEIGHT / 2);
     }
 
 
-    /**
-     * Wrapper function to get ball horizontal offset (tx) to target
-     */
+    
+    //method to get limelight horizontal offset (tx) to target
+     
     public double getObjectTX() {
         return m_Limelight.getValue(LimelightKey.HORIZONTAL_OFFSET);
     }
+    //getting shuffleboard data for cone 
     public boolean getisCone() {
         double[] data = m_Limelight.getCustomData();
         return data[0] == 1.00;
     }
+    //getting shuffleboard data for cube
     public boolean getisCube() {
         double[] data2 = m_Limelight.getCustomData();
         return data2[1] == 0.00;
     }
-
+    //getting shuffleboard data for general object
     public boolean getisGeneral() {
         double[] data3 = m_Limelight.getCustomData();
         return data3[2] == 2.00;
@@ -95,17 +87,17 @@ public class LimelightSubsystem extends SubsystemBase{
 
     }
 
-    /**
-     * Wrapper function to get ball vertical offset (ty) to target
-     */
+
+     //method for getting limelight vertical offset (ty) to target
+ 
     public double getObjectTY() {
         return m_Limelight.getValue(LimelightKey.VERTICAL_OFFSET);
     }
 
-    /**
-     * Wrapper function to get if the ball limelight has a valid target
-     */
+    //method for getting if the ball limelight has a valid target
+ 
     public boolean getObjectHasValidTarget() {
+        
         return m_Limelight.hasValidTarget();
     }
     

@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.DriverStation.MatchType;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import static edu.wpi.first.wpilibj2.command.Commands.*;
+
+import frc.team3128.commands.CmdAutoAlign;
 import frc.team3128.commands.CmdAutoBalance;
 import frc.team3128.commands.CmdSwerveDrive;
 import frc.team3128.PositionConstants.Position;
@@ -18,6 +20,7 @@ import frc.team3128.common.narwhaldashboard.NarwhalDashboard;
 import frc.team3128.common.utility.NAR_Shuffleboard;
 import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Vision;
+
 
 /**
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -80,13 +83,12 @@ public class RobotContainer {
         }));
         
         rightStick.getButton(1).onTrue(resetGyro());
-        rightStick.getButton(2).onTrue(moveElv(0.4)).onFalse(moveElv(0));
+        //auto align button
+        rightStick.getButton(2).onTrue(new CmdAutoAlign());
         rightStick.getButton(3).onTrue(moveElv(-0.4)).onFalse(moveElv(0));
         rightStick.getButton(4).onTrue(moveElevator(30));
         rightStick.getButton(5).onTrue(resetElevator());
         rightStick.getButton(6).onTrue(moveWri(0.4)).onFalse(moveWri(0));
-   
-   
         rightStick.getButton(7).onTrue(moveWri(-0.4)).onFalse(moveWri(0));
         rightStick.getButton(8).onTrue(moveWrist(30));
         rightStick.getButton(9).onTrue(resetWrist());

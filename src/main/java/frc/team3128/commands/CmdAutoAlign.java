@@ -33,13 +33,14 @@ public class CmdAutoAlign extends CommandBase {
         m_limelight = LimelightSubsystem.getInstance();
         m_swerve = Swerve.getInstance();
         addRequirements(m_swerve);
+        m_limelight.initShuffleboard();
        
     }
        @Override
        public void execute() {
         switch (targetState) {
             case SEARCHING:
-            m_limelight.getisGeneral();
+            m_limelight.getisGeneral(); //getting shuffleboard data on general object (cone or cube)
             if (m_limelight.getObjectHasValidTarget()) {
                 targetCount ++;
             }
@@ -55,10 +56,10 @@ public class CmdAutoAlign extends CommandBase {
                 //find threshhold later
                 currentHorizontalOffset = m_limelight.getObjectTX();
                 previous_error = currentHorizontalOffset - HORIZONTAL_OFFSET_GOAL;
-                //fpga thing??
                 targetState = detectionStates.FEEDBACK;
+                //returns previous amount of time that it took for image to not be blurry (i think)
                 previousTime = Timer.getFPGATimestamp();
-                m_limelight.initShuffleboard();
+                
             }
             
             case FEEDBACK:

@@ -59,7 +59,7 @@ public class Limelight {
     }
 
     public double[] getCustomData(){
-        return limelightTable.getEntry("llpython").getDoubleArray(new double[0]);
+        return limelightTable.getEntry("llpython").getDoubleArray(new double[8]);
     }
 
 
@@ -71,6 +71,10 @@ public class Limelight {
         }
 
         return runningTotal / numSamples;
+    }
+
+    public double getArea() {
+        return getValue(LimelightKey.AREA);
     }
 
     /**

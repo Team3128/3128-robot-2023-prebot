@@ -83,11 +83,8 @@ public class RobotContainer {
         }));
         
         rightStick.getButton(1).onTrue(resetGyro());
-        //auto align button
-        rightStick.getButton(2).onTrue(new CmdAutoAlign());
-        rightStick.getButton(3).onTrue(moveElv(-0.4)).onFalse(moveElv(0));
-        rightStick.getButton(4).onTrue(moveElevator(30));
-        rightStick.getButton(5).onTrue(resetElevator());
+        //auto align button technically doesn't need onFalse but just in case 
+        rightStick.getButton(2).onTrue(new CmdAutoAlign()).onFalse(stop());
         rightStick.getButton(6).onTrue(moveWri(0.4)).onFalse(moveWri(0));
         rightStick.getButton(7).onTrue(moveWri(-0.4)).onFalse(moveWri(0));
         rightStick.getButton(8).onTrue(moveWrist(30));

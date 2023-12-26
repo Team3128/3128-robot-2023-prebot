@@ -1,13 +1,10 @@
 package frc.team3128.commands;
-import static frc.team3128.Constants.AutoConstants.rotationKD;
-import static frc.team3128.Constants.LimelightConstants.HORIZONTAL_OFFSET_GOAL;
 import static frc.team3128.Constants.LimelightConstants.OBJ_KD;
+import static frc.team3128.Constants.LimelightConstants.OBJ_KI;
 import static frc.team3128.Constants.LimelightConstants.OBJ_KP;
 import static frc.team3128.Constants.LimelightConstants.TX_THRESHOLD;
-
-import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3128.subsystems.LimelightSubsystem;
 import frc.team3128.subsystems.Swerve;
@@ -17,12 +14,9 @@ public class CmdAutoAlign extends CommandBase {
     private LimelightSubsystem m_limelight;
     private Swerve m_swerve;
     private double targetCount;
-    private double currentHorizontalOffset;
-    private double previous_error;
-    private double current_error;
-    private double previousTime;
-    private double currentTime;
-    private double power; 
+    private double m_measurement;
+    private PIDController controller;
+    private double output;
     private detectionStates targetState = detectionStates.SEARCHING;
 
     private enum detectionStates {
@@ -30,18 +24,19 @@ public class CmdAutoAlign extends CommandBase {
     }
 
     public CmdAutoAlign() {
+        controller = new PIDController(OBJ_KP, OBJ_KI, OBJ_KD); //KI not used
         m_limelight = LimelightSubsystem.getInstance();
         m_swerve = Swerve.getInstance();
         addRequirements(m_swerve);
         m_limelight.initShuffleboard();
+        
        
     }
        @Override
        public void execute() {
         switch (targetState) {
             case SEARCHING:
-            m_limelight.getisGeneral(); //getting shuffleboard data on general object (cone or cube)
-            if (m_limelight.getObjectHasValidTarget()) {
+            if (m_limelight.getValidTarget()) {
                 targetCount ++;
             }
                 else 
@@ -54,45 +49,38 @@ public class CmdAutoAlign extends CommandBase {
             //basically waits for a while until the interations match
             if (targetCount > TX_THRESHOLD) { 
                 //find threshhold later
-                currentHorizontalOffset = m_limelight.getObjectTX();
-                previous_error = currentHorizontalOffset - HORIZONTAL_OFFSET_GOAL;
                 targetState = detectionStates.FEEDBACK;
-                //returns previous amount of time that it took for image to not be blurry (i think)
-                previousTime = Timer.getFPGATimestamp();
-                
+                controller.reset();
             }
+
+                break;
             
             case FEEDBACK:
-            if ( ! m_limelight.getObjectHasValidTarget()) {
+            if ( ! m_limelight.getValidTarget()) {
                 targetState = detectionStates.SEARCHING;
             }
 
             else 
             {
-                currentHorizontalOffset = m_limelight.getObjectTX();
-                currentHorizontalOffset = current_error;
-                currentTime = Timer.getFPGATimestamp();
-                
-                power = power + OBJ_KP * current_error;
-                power = power + OBJ_KD * (previous_error - current_error) / (previousTime - currentTime);
-                
-                power = MathUtil.clamp(power, -1, 1);
-                m_swerve.drive(new Translation2d(4,0), power, false);
+                m_measurement = m_limelight.getObjectTX();
+                output = controller.calculate(m_measurement);
+                m_swerve.drive(new Translation2d(4,0), output, false);
+                }
 
-            }
+                break;
 
             case BLIND:
             m_swerve.drive(new Translation2d(0, 0), 3, false); 
 
-            if (m_limelight.getObjectHasValidTarget()) {
+            if (m_limelight.getValidTarget()) {
                 targetState = detectionStates.SEARCHING;
             }
+            controller.reset();
+                break;
 
         }
 
     }
-        
-       
 
        @Override
        public boolean isFinished() {

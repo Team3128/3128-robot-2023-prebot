@@ -9,4 +9,5 @@ public class LimelightConstants {
 
     public static final double HORIZONTAL_FOV = 59.6; //degrees
     public static final double VERTICAL_FOV = 45.7; //degrees
+    
 }

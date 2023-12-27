@@ -25,7 +25,8 @@ public class LimelightSubsystem extends SubsystemBase{
         m_limelight = new Limelight("limelight-blob", CAMERA_ANGLE, CAMERA_HEIGHT, FRONT_DISTANCE);
         isAligned = () -> Math.abs(getObjectTX()) <= TX_THRESHOLD && getValidTarget();
         addPlateau = () -> Math.abs(getObjectTX()) <= 3 && getValidTarget();
-        Pipeline p_both = Pipeline.BOTH;
+        //setting pipeline for detetecting both cube and cone
+        Pipeline p_both = Pipeline.BOTH; 
         m_limelight.setPipeline(p_both);
         initShuffleboard();
     }

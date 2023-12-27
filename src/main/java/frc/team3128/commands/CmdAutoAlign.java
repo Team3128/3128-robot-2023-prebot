@@ -28,6 +28,8 @@ public class CmdAutoAlign extends CommandBase {
         m_limelight = LimelightSubsystem.getInstance();
         m_swerve = Swerve.getInstance();
         addRequirements(m_swerve);
+
+        //calls shuffleboard
         m_limelight.initShuffleboard();
         
        
@@ -46,7 +48,7 @@ public class CmdAutoAlign extends CommandBase {
                 }
 
             //tx_threshhold for seeing how many interations is needed for the image to not be blurry
-            //basically waits for a while until the interations match
+            //essentially waits for a while until the interations match
             if (targetCount > TX_THRESHOLD) { 
                 //find threshhold later
                 targetState = detectionStates.FEEDBACK;
@@ -55,11 +57,13 @@ public class CmdAutoAlign extends CommandBase {
 
                 break;
             
+            //switches to searching state if no object is detected
             case FEEDBACK:
             if ( ! m_limelight.getValidTarget()) {
                 targetState = detectionStates.SEARCHING;
             }
 
+            //if object is detected, calculate power needed to auto align 
             else 
             {
                 m_measurement = m_limelight.getObjectTX();
@@ -69,12 +73,14 @@ public class CmdAutoAlign extends CommandBase {
 
                 break;
 
+            //basically rotate until object found, then switch to searching
             case BLIND:
             m_swerve.drive(new Translation2d(0, 0), 3, false); 
 
             if (m_limelight.getValidTarget()) {
                 targetState = detectionStates.SEARCHING;
             }
+            //resets error
             controller.reset();
                 break;
 

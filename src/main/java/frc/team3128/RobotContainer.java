@@ -16,6 +16,8 @@ import static frc.team3128.commands.CmdManager.*;
 import frc.team3128.common.hardware.input.NAR_ButtonBoard;
 import frc.team3128.common.hardware.input.NAR_Joystick;
 import frc.team3128.common.hardware.input.NAR_XboxController;
+import frc.team3128.common.hardware.limelight.Limelight;
+import frc.team3128.subsystems.LimelightSubsystem;
 import frc.team3128.common.narwhaldashboard.NarwhalDashboard;
 import frc.team3128.common.utility.NAR_Shuffleboard;
 import frc.team3128.subsystems.LimelightSubsystem;
@@ -30,6 +32,7 @@ import frc.team3128.subsystems.Vision;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    private LimelightSubsystem limelight;
 
     private Swerve swerve;
     private LimelightSubsystem limelight;
@@ -181,6 +184,8 @@ public class RobotContainer {
 
         swerve.initShuffleboard();
         Vision.getInstance().initShuffleboard();
+        limelight = LimelightSubsystem.getInstance();
+        limelight.initShuffleboard();
 
         NarwhalDashboard.startServer();
     }

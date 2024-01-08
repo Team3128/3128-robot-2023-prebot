@@ -1,7 +1,6 @@
 package frc.team3128.subsystems;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleFunction;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;

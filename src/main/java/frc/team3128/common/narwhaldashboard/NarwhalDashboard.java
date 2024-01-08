@@ -1,13 +1,10 @@
 package frc.team3128.common.narwhaldashboard;
-
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.java_websocket.WebSocket;
@@ -19,11 +16,9 @@ import org.json.simple.JSONObject;
 import frc.team3128.common.constantsint.ConstantsInt;
 import frc.team3128.common.hardware.camera.*;
 import frc.team3128.common.hardware.camera.NAR_Camera.Pipeline;
-import frc.team3128.common.narwhaldashboard.DashButtonCallback;
-import frc.team3128.common.narwhaldashboard.NumericalDataCallback;
 import frc.team3128.common.utility.Log;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
+
 
 public class NarwhalDashboard extends WebSocketServer {
     public static int cellSelectedPosX, cellSelectedPosY, gridNum;
@@ -47,7 +42,6 @@ public class NarwhalDashboard extends WebSocketServer {
     private static String selectedAuto = null;
     private static String selectedLimelight = null;
     private static boolean pushed = false;
-    private static volatile boolean constantsChanged = true;
 
     public NarwhalDashboard(int port) throws UnknownHostException {
         super(new InetSocketAddress(port));

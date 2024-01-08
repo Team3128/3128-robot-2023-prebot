@@ -448,9 +448,9 @@ public class Constants {
             public static final double TX_THRESHOLD = 4;
             public static final double OBJ_TARGET_HEIGHT = 9.5 / 2;
             public static final double HORIZONTAL_OFFSET_GOAL = 0;
-            public static final double OBJ_KP = 0;
-            public static final double OBJ_KD = 0;
-            public static final double OBJ_KI = 0;
+            public static final double KP = 0.1;
+            public static final double KD = 0;
+            public static final double KI = 0;
             public static final double MIN_AREA = 1000;
         }
 

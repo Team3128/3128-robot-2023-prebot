@@ -2,20 +2,9 @@ package frc.team3128.subsystems;
 
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
-import com.ctre.phoenix.led.CANdle.VBatOutputMode;
-import com.ctre.phoenix.CANifier.LEDChannel;
-import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdleConfiguration;
-import com.ctre.phoenix.led.CANdleControlFrame;
-import com.ctre.phoenix.led.CANdleStatusFrame;
 import com.ctre.phoenix.led.RainbowAnimation;
-import com.ctre.phoenix.led.RgbFadeAnimation;
 import com.ctre.phoenix.led.SingleFadeAnimation;
-import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
-import com.ctre.phoenix.led.LarsonAnimation.BounceMode;
-import com.ctre.phoenix.led.TwinkleAnimation.TwinklePercent;
-import com.ctre.phoenix.led.TwinkleOffAnimation.TwinkleOffPercent;
-
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team3128.Constants.LedConstants;

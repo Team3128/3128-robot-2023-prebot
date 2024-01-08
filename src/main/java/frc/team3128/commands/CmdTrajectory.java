@@ -10,12 +10,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static frc.team3128.Constants.FieldConstants.*;
 
 import java.util.ArrayList;
-import java.util.function.BooleanSupplier;
 
 import static frc.team3128.Constants.AutoConstants.*;
 

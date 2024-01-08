@@ -1,7 +1,7 @@
 package frc.team3128.commands;
-import static frc.team3128.Constants.LimelightConstants.OBJ_KD;
-import static frc.team3128.Constants.LimelightConstants.OBJ_KI;
-import static frc.team3128.Constants.LimelightConstants.OBJ_KP;
+import static frc.team3128.Constants.LimelightConstants.KD;
+import static frc.team3128.Constants.LimelightConstants.KI;
+import static frc.team3128.Constants.LimelightConstants.KP;
 import static frc.team3128.Constants.LimelightConstants.TX_THRESHOLD;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -24,7 +24,7 @@ public class CmdAutoAlign extends CommandBase {
     }
 
     public CmdAutoAlign() {
-        controller = new PIDController(OBJ_KP, OBJ_KI, OBJ_KD); //KI not used
+        controller = new PIDController(KP, KI, KD); //KD not used unless no friction involved, KI not used cause feedforward
         m_limelight = LimelightSubsystem.getInstance();
         m_swerve = Swerve.getInstance();
         addRequirements(m_swerve);

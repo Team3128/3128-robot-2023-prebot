@@ -7,9 +7,6 @@ import java.util.function.BiConsumer;
 import java.util.function.DoubleSupplier;
 
 import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonUtils;
-import org.photonvision.SimVisionSystem;
-import org.photonvision.SimVisionTarget;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;

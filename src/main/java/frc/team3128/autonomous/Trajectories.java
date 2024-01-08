@@ -110,7 +110,6 @@ public class Trajectories {
             resetLeds(),
             resetGyro(DriverStation.getAlliance() == Alliance.Red ? 0 : 180),
             runOnce(()-> Manipulator.getInstance().set(-0.4), Manipulator.getInstance()),
-            runOnce(()-> Manipulator.getInstance().isCone = true),
             resetAll(),
             retract(Position.NEUTRAL)
         );

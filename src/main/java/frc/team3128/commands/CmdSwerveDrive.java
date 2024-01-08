@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.team3128.common.utility.NAR_Shuffleboard;
 import frc.team3128.subsystems.Swerve;
 import static frc.team3128.Constants.SwerveConstants.*;
 
@@ -74,8 +73,7 @@ public class CmdSwerveDrive extends CommandBase {
             }
         }
 
-        Rotation2d driveAngle = translation.getAngle();
-        double slowedDist = accelLimiter.calculate(translation.getNorm());
+
         // translation = new Translation2d(slowedDist, driveAngle);
 
         SmartDashboard.putBoolean("fieldOriented",swerve.fieldRelative);

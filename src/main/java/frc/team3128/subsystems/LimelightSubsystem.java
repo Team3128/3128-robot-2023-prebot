@@ -28,7 +28,6 @@ public class LimelightSubsystem extends SubsystemBase{
         //setting pipeline for detetecting both cube and cone
         Pipeline p_both = Pipeline.BOTH; 
         m_limelight.setPipeline(p_both);
-        initShuffleboard();
     }
 
     public static synchronized LimelightSubsystem getInstance() {

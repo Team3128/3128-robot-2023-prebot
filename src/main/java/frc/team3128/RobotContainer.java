@@ -18,6 +18,7 @@ import frc.team3128.common.hardware.input.NAR_Joystick;
 import frc.team3128.common.hardware.input.NAR_XboxController;
 import frc.team3128.common.narwhaldashboard.NarwhalDashboard;
 import frc.team3128.common.utility.NAR_Shuffleboard;
+import frc.team3128.subsystems.LimelightSubsystem;
 import frc.team3128.subsystems.Swerve;
 import frc.team3128.subsystems.Vision;
 
@@ -31,6 +32,7 @@ import frc.team3128.subsystems.Vision;
 public class RobotContainer {
 
     private Swerve swerve;
+    private LimelightSubsystem limelight;
 
     private NAR_Joystick rightStick;
     private NAR_ButtonBoard buttonPad;
@@ -40,6 +42,7 @@ public class RobotContainer {
     public RobotContainer() {
 
         swerve = Swerve.getInstance();
+        limelight = LimelightSubsystem.getInstance();
 
         rightStick = new NAR_Joystick(1);
         controller = new NAR_XboxController(2);
@@ -182,14 +185,20 @@ public class RobotContainer {
         NarwhalDashboard.startServer();
     }
 
+    public void periodic() 
+    {
+        
+    }
+
     public void updateDashboard() {
         NarwhalDashboard.put("time", Timer.getMatchTime());
         NarwhalDashboard.put("voltage", RobotController.getBatteryVoltage());
         NarwhalDashboard.put("x", swerve.getPose().getX());
         NarwhalDashboard.put("y", swerve.getPose().getY());
-        
+        NAR_Shuffleboard.update();
+
         if (DriverStation.getMatchType() == MatchType.None) {
-            NAR_Shuffleboard.update();
+            
         }
     }
 }

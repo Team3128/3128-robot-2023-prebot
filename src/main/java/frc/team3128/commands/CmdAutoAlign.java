@@ -69,7 +69,7 @@ public class CmdAutoAlign extends CommandBase {
             {
                 m_measurement = m_limelight.getObjectTX();
                 output = controller.calculate(m_measurement);
-                m_swerve.drive(new Translation2d(4,0), output, false);
+                m_swerve.drive(new Translation2d(0,4), output, false);
                 }
 
                 break;

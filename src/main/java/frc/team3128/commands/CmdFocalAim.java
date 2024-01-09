@@ -29,9 +29,7 @@ public class CmdFocalAim {
         double coordFocalX = focalPosition.getTranslation().getX();
         double coordFocalY = focalPosition.getTranslation().getY();
         double angleAim = Math.atan((coordFocalY-coordRobotY)/(coordFocalX-coordRobotX));
-        m_swerve.drive(new Translation2d(0, 0), angleAim, false);
-        
-
+        m_swerve.drive(new Translation2d(0, 0), angleAim, true);
     }
     
     

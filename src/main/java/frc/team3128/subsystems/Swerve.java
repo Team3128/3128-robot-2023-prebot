@@ -47,6 +47,10 @@ public class Swerve extends SubsystemBase {
 
     private double initialRoll, initialPitch;
 
+    //stuff for focal point
+    private Pose2d focalPosition; // field relative, temporary value
+    private Pose2d robotPosition;
+
     public static synchronized Swerve getInstance() {
         if (instance == null) {
             instance = new Swerve();
@@ -246,4 +250,14 @@ public class Swerve extends SubsystemBase {
         return (Math.abs(measured.speedMetersPerSecond - theoretical.speedMetersPerSecond)/ theoretical.speedMetersPerSecond) < 0.05 
         && (Math.abs(measured.angle.getDegrees() - theoretical.angle.getDegrees())/ theoretical.angle.getDegrees()) < 0.05;
       }
+
+    //focal aim command method thing, kinda just throwing it in here
+    public double getSetpoint() {
+        double coordRobotX = robotPosition.getTranslation().getX();
+        double coordRobotY = robotPosition.getTranslation().getY();
+        double coordFocalX = focalPosition.getTranslation().getX();
+        double coordFocalY = focalPosition.getTranslation().getY();
+        double angleSetpoint = Math.atan((coordFocalY-coordRobotY)/(coordFocalX-coordRobotX));
+        return angleSetpoint;
+    }
 }

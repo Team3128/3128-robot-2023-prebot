@@ -8,7 +8,7 @@ import frc.team3128.PositionConstants.Position;
 import frc.team3128.commands.CmdAutoBalance;
 import static frc.team3128.commands.CmdManager.*;
 
-import common.utility.narwhaldashboard.NarwhalDashboard;
+// import common.utility.narwhaldashboard.NarwhalDashboard;
 
 /**
  * Class to store information about autonomous routines.
@@ -35,7 +35,7 @@ public class AutoPrograms {
 
                                                 "scuffedClimb"
                                             };
-        NarwhalDashboard.getInstance().addAutos(autoStrings);
+        // NarwhalDashboard.getInstance().addAutos(autoStrings);
     }
 
     public Command getAutonomousCommand() {

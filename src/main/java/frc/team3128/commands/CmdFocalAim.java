@@ -1,8 +1,12 @@
 package frc.team3128.commands;
+import static frc.team3128.Constants.FocalAimConstants.turnKP;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.team3128.subsystems.Swerve;
-
 
 /*
  * To DO:
@@ -11,26 +15,37 @@ import frc.team3128.subsystems.Swerve;
  * 3. Choose a different position and attempt to convert the location to aim in the threshold of the speaker
  * 4. use the +/- threshold and crease a function to scale the robots location to the angle at which the robot should aim
  */
-public class CmdFocalAim {
-    private double focalAngle; // robot relative, temporary value
-    private Pose2d focalPosition; // field relative, temporary value
-    private Pose2d robotPosition;
-    private double angleRobot;
+public class CmdFocalAim extends CommandBase {
+    private static PIDController controller;
     private Swerve m_swerve;
+    public static double setpoint; //aka distance
+    private static double rotation;
 
-    
-
-    public CmdFocalAim(){
-        m_swerve=Swerve.getInstance();
-        angleRobot=m_swerve.getYaw();
-        robotPosition=m_swerve.getPose();
-        double coordRobotX = robotPosition.getTranslation().getX();
-        double coordRobotY = robotPosition.getTranslation().getY();
-        double coordFocalX = focalPosition.getTranslation().getX();
-        double coordFocalY = focalPosition.getTranslation().getY();
-        double angleAim = Math.atan((coordFocalY-coordRobotY)/(coordFocalX-coordRobotX));
-        m_swerve.drive(new Translation2d(0, 0), angleAim, true);
+    public CmdFocalAim()
+    { 
+        Swerve m_swerve = Swerve.getInstance();
+        controller = new PIDController(turnKP, 0, 0);
     }
-    
+
+    public void execute() 
+    {
+        setpoint = m_swerve.getSetpoint();
+        //rotation needed calculated based off of the setpoint
+        rotation = Units.degreesToRadians(controller.calculate(m_swerve.getGyroRotation2d().getDegrees(), setpoint));
+
+        if (controller.atSetpoint()) 
+        {
+            rotation = 0;
+        }
+        
+        m_swerve.drive(new Translation2d(4,0), rotation, false);
+    }
+
+
+    public void end(boolean interrupted) 
+    {
+
+    }
+
     
 }

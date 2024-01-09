@@ -440,6 +440,10 @@ public class Constants {
         }
     }
 
+    public static class FocalAimConstants {
+            public static double turnKP = 5;
+        }
+
 
 }
 

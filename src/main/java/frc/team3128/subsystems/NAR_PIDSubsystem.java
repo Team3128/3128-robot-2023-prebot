@@ -87,13 +87,17 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
         NAR_Shuffleboard.addSendable(getName(), getName(), this, 4, 0);
 
         // Print entryPositions:
-        if (getName().equals("Wrist")) { // To ensure this check is done only once
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 6; j++) {
-                NAR_Shuffleboard.addData("TESTER", "X: " + i + " Y: " + j, NAR_Shuffleboard.entryPositions.get("Drivetrain")[i][j] == true, i, j);
-                }
-            }
-        }
+        // if (getName().equals("Wrist")) { // To ensure this check is done only once
+        //     for (int i = 0; i < 8; i++) {
+        //         for (int j = 0; j < 6; j++) {
+        //             final int row = i;
+        //             final int col = j;
+        //         NAR_Shuffleboard.addData("TESTER", "X: " + i + " Y: " + j, ()-> NAR_Shuffleboard.entryPositions.get("Manipulator")[row][col] == true, i, j);
+        //         }
+        //     }
+        // }
+
+        
     }
 
     /**

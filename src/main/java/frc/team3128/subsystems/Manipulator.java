@@ -72,8 +72,17 @@ public class Manipulator extends SubsystemBase {
     }
     
     public void initShuffleboard() {
-        NAR_Shuffleboard.addData("Manipulator", "Manip current", () -> getCurrent(), 0, 1);
-        NAR_Shuffleboard.addData("Manipulator", "get", () -> m_roller.getMotorOutputPercent(), 0, 3);
-        NAR_Shuffleboard.addData("Manipulator", "ObjectPresent", ()-> hasObjectPresent(), 1, 1);
+        NAR_Shuffleboard.addData("Manipulator", "Manip current", () -> getCurrent(), 0, 0);
+        NAR_Shuffleboard.addData("Manipulator", "get", () -> m_roller.getMotorOutputPercent(), 1, 0);
+        NAR_Shuffleboard.addData("Manipulator", "ObjectPresent", ()-> hasObjectPresent(), 2, 0);
+        NAR_Shuffleboard.addVideoStream("Manipulator", "VideoTest", "Gua", "mjpg:http://10.31.28.71:5800/", 0, 1, 3, 3);
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 6; j++) {
+                final int row = i;
+                final int col = j;
+            NAR_Shuffleboard.addData("TESTER", "X: " + i + " Y: " + j, ()-> NAR_Shuffleboard.entryPositions.get("Manipulator")[row][col] == true, i, j);
+            }
+        }
     }
 }

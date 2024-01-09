@@ -1,6 +1,8 @@
 package frc.team3128.common.utility;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -11,9 +13,11 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -180,13 +184,44 @@ public class NAR_Shuffleboard {
         try {
             if(!tabs.containsKey(tabName)) create_tab(tabName);
             fillEntryPositions(x, y, width, height, tabName);
-    
             return Shuffleboard.getTab(tabName).add(name, data).withPosition(x,y).withSize(width, height);
         }
         catch(Exception e) {
             return null;
         }
         // return addSendable(tabName, name, data, x, y).withSize(width,height);
+    }
+
+    public static ComplexWidget addVideoStream(String tabName, String name, String cameraName, String URL, int x, int y, int width, int height) {
+        try {
+            if (!tabs.containsKey(tabName)) create_tab(tabName);
+            fillEntryPositions(x, y, width, height, tabName);
+
+            ComplexWidget videoStream = Shuffleboard.getTab(tabName)
+            .addCamera(name, cameraName, URL)
+            .withProperties(Map.of("showControls", false))
+            .withPosition(x, y)
+            .withSize(width, height);            
+            return videoStream;
+        }
+        catch(Exception e) {
+            return null;
+        }
+    }
+
+    public static void addAutos(String[] autoNames) {
+        if (!tabs.containsKey("Autos")) create_tab("Autos");
+        ShuffleboardLayout autoLayout = Shuffleboard.getTab("Autos")
+        .getLayout("Auto Names", BuiltInLayouts.kList)
+        .withSize(2,4);
+        // .withProperties(Map.of("Label position", "HIDDEN"));
+        for (int i = 1; i <= autoNames.length; i++) {
+            autoLayout.add(""+i, autoNames[i-1]); // Shuffleboard doesn't display elements in order of String[] names so we can't use an auto name's index to reference it
+        }
+        // DoubleSupplier autoNumber = NAR_Shuffleboard.debug("Autos", "Selector", -1, 3, 0);
+        // var autoEntry = NAR_Shuffleboard.addData("Autos", "TOGGLE", false, 2, 0).withWidget("Toggle Button"); // TODO why use var vs SimpleWidget?
+        // debug = ()-> debugEntry.getEntry().getBoolean(false);
+        // NAR_Shuffleboard.addData(getName(), "DEBUG", ()-> debug.getAsBoolean(), 2, 1);
     }
 
     /**

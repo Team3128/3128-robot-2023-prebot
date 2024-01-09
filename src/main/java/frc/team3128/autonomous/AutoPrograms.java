@@ -7,7 +7,11 @@ import static edu.wpi.first.wpilibj2.command.Commands.*;
 import frc.team3128.PositionConstants.Position;
 import frc.team3128.commands.CmdAutoBalance;
 import frc.team3128.common.narwhaldashboard.NarwhalDashboard;
+import frc.team3128.common.utility.NAR_Shuffleboard;
+
 import static frc.team3128.commands.CmdManager.*;
+
+import java.util.function.DoubleSupplier;
 
 /**
  * Class to store information about autonomous routines.
@@ -35,6 +39,7 @@ public class AutoPrograms {
                                                 "scuffedClimb"
                                             };
         NarwhalDashboard.addAutos(autoStrings);
+        NAR_Shuffleboard.addAutos(autoStrings);
     }
 
     public Command getAutonomousCommand() {

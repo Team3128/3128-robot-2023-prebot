@@ -35,7 +35,6 @@ public class RobotContainer {
     private LimelightSubsystem limelight;
 
     private Swerve swerve;
-    private LimelightSubsystem limelight;
 
     private NAR_Joystick rightStick;
     private NAR_ButtonBoard buttonPad;

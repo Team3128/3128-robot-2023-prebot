@@ -18,7 +18,7 @@ import frc.team3128.common.utility.NAR_Shuffleboard;
 /**
  * A subsystem based off of {@link PIDSubsystem} 
  * @since 2023 CHARGED UP
- * @author Mason Lam, Arav Chadha, Peter Ma
+ * @author Mason Lam
  */
 public abstract class NAR_PIDSubsystem extends SubsystemBase {
     protected final PIDController m_controller;
@@ -82,20 +82,9 @@ public abstract class NAR_PIDSubsystem extends SubsystemBase {
         this.kG = NAR_Shuffleboard.debug(getName(), "kG", kG, 3, 2);
 
         NAR_Shuffleboard.addData(getName(), "atSetpoint", ()-> atSetpoint(), 0, 2);
-        NAR_Shuffleboard.addData(getName(), "TestSendable", NAR_Shuffleboard.entryPositions.get(getName())[0][0] == true, 6, 3); // TODO test - pls delete
-        NAR_Shuffleboard.addData(getName(), "TestData", NAR_Shuffleboard.entryPositions.get(getName())[1][0] == true, 7, 3); // TODO test - pls delete
         NAR_Shuffleboard.addSendable(getName(), getName(), this, 4, 0);
 
-        // Print entryPositions:
-        // if (getName().equals("Wrist")) { // To ensure this check is done only once
-        //     for (int i = 0; i < 8; i++) {
-        //         for (int j = 0; j < 6; j++) {
-        //             final int row = i;
-        //             final int col = j;
-        //         NAR_Shuffleboard.addData("TESTER", "X: " + i + " Y: " + j, ()-> NAR_Shuffleboard.entryPositions.get("Manipulator")[row][col] == true, i, j);
-        //         }
-        //     }
-        // }
+        NAR_Shuffleboard.addData(getName(), "TETS", ()-> getSetpoint());
 
         
     }

@@ -11,8 +11,6 @@ import frc.team3128.common.utility.NAR_Shuffleboard;
 
 import static frc.team3128.commands.CmdManager.*;
 
-import java.util.function.DoubleSupplier;
-
 /**
  * Class to store information about autonomous routines.
  * @author Daniel Wang, Mason Lam
@@ -43,7 +41,8 @@ public class AutoPrograms {
     }
 
     public Command getAutonomousCommand() {
-        String selectedAutoName = NarwhalDashboard.getSelectedAutoName();
+        String selectedAutoName = NarwhalDashboard.getSelectedAutoName(); // Priority to NarwhalDashboard
+        if (selectedAutoName == null) { selectedAutoName = NAR_Shuffleboard.getSelectedAutoName(); }
         final Command autoCommand;
 
         if (selectedAutoName == null) {

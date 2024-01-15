@@ -179,7 +179,6 @@ public class RobotContainer {
 
         swerve.initShuffleboard();
         Vision.getInstance().initShuffleboard();
-
         NarwhalDashboard.startServer();
     }
 

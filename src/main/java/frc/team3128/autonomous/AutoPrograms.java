@@ -7,6 +7,8 @@ import static edu.wpi.first.wpilibj2.command.Commands.*;
 import frc.team3128.PositionConstants.Position;
 import frc.team3128.commands.CmdAutoBalance;
 import frc.team3128.common.narwhaldashboard.NarwhalDashboard;
+import frc.team3128.common.utility.NAR_Shuffleboard;
+
 import static frc.team3128.commands.CmdManager.*;
 
 /**
@@ -35,10 +37,12 @@ public class AutoPrograms {
                                                 "scuffedClimb"
                                             };
         NarwhalDashboard.addAutos(autoStrings);
+        NAR_Shuffleboard.addAutos(autoStrings);
     }
 
     public Command getAutonomousCommand() {
-        String selectedAutoName = NarwhalDashboard.getSelectedAutoName();
+        String selectedAutoName = NarwhalDashboard.getSelectedAutoName(); // Priority to NarwhalDashboard
+        if (selectedAutoName == null) { selectedAutoName = NAR_Shuffleboard.getSelectedAutoName(); }
         final Command autoCommand;
 
         if (selectedAutoName == null) {
